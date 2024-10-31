@@ -1,3 +1,4 @@
+// uppdaterad UserMenu-komponent
 "use client";
 
 import { useCallback, useEffect, useState } from "react";
@@ -17,20 +18,18 @@ const UserMenu = () => {
     setIsOpen((value) => !value);
   }, []);
 
-  // Lyssna på användarens inloggningsstatus
   useEffect(() => {
     const unsubscribe = onAuthStateChanged(auth, (user) => {
       setIsLoggedIn(!!user);
-      setIsOpen(false); // Stänger menyn vid statusändring (inloggning/utloggning)
+      setIsOpen(false);
     });
     return () => unsubscribe();
   }, []);
 
-  // Logga ut funktion
   const handleLogout = async () => {
     await signOut(auth);
-    setIsOpen(false); // Stäng menyn efter utloggning
-    toast.success("Successfully signed out!"); // Visa toast vid utloggning
+    setIsOpen(false);
+    toast.success("Successfully signed out!");
     router.push("/");
   };
 
@@ -43,7 +42,6 @@ const UserMenu = () => {
       {isOpen && (
         <div className="absolute right-0 mt-2 w-[20vh] bg-timberwolf border border-gray-300 rounded-lg shadow-lg z-50">
           {isLoggedIn ? (
-            // Visa Profile och Log out om användaren är inloggad
             <>
               <MenuItem
                 onClick={() => {
@@ -52,10 +50,16 @@ const UserMenu = () => {
                 }}
                 label="Profile"
               />
+              <MenuItem
+                onClick={() => {
+                  router.push("/add-listing");
+                  setIsOpen(false);
+                }}
+                label="Add your own wandercabin"
+              />
               <MenuItem onClick={handleLogout} label="Log out" />
             </>
           ) : (
-            // Visa Sign In och Sign Up om användaren inte är inloggad
             <>
               <MenuItem
                 onClick={() => {
