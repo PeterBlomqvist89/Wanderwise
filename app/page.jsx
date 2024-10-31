@@ -20,7 +20,7 @@ export default function MainPage() {
   }, []);
 
   return (
-    <div className="p-8 max-w-[996px] mx-auto grid grid-cols-1 md:grid-cols-3 gap-4">
+    <div className="p-8 max-w-[1050px] mx-auto flex flex-col  grid-cols-1 md:grid-cols-3 gap-4 md:grid">
       {listings.map((listing, index) => (
         <ListingCard
           key={listing.id}

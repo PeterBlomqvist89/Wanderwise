@@ -8,7 +8,7 @@ const NavbarSmall = () => {
   const router = useRouter();
 
   return (
-    <nav className="flex md:hidden bg-ferngreen fixed bottom-0 left-0 right-0 h-[78px] items-center justify-around px-8">
+    <nav className="flex md:hidden bg-ferngreen fixed bottom-0 left-0 right-0 h-[78px] items-center justify-around px-8 z-50">
       <House
         onClick={() => router.push("/")}
         color="var(--timberwolf)"
@@ -20,6 +20,7 @@ const NavbarSmall = () => {
         color="var(--timberwolf)"
         size={45}
         className="cursor-pointer"
+        onClick={() => router.push("/profile")}
       />
     </nav>
   );

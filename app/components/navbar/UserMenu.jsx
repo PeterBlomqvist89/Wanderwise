@@ -28,9 +28,14 @@ const UserMenu = () => {
 
   const handleLogout = async () => {
     await signOut(auth);
+    setIsLoggedIn(false); // Manuellt sätt isLoggedIn till false
     setIsOpen(false);
     toast.success("Successfully signed out!");
-    router.push("/");
+
+    // Fördröj omdirigering för att säkerställa att användaren loggas ut innan sidan byts
+    setTimeout(() => {
+      router.push("/");
+    }, 10);
   };
 
   return (

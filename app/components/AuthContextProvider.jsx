@@ -27,6 +27,17 @@ const AuthContextProvider = ({ children }) => {
     return () => unsub();
   }, []);
 
+  const updateUserProfile = async (profileData) => {
+    if (user) {
+      try {
+        await updateProfile(user, profileData);
+        setUser({ ...user, ...profileData }); // Uppdaterar user-objektet i context
+      } catch (error) {
+        console.error("Error updating user profile:", error);
+      }
+    }
+  };
+
   const register = async (values) => {
     const toastId = toast.loading("Creating account...");
     try {
@@ -90,6 +101,7 @@ const AuthContextProvider = ({ children }) => {
     authLoaded,
     register,
     login,
+    updateUserProfile,
   };
 
   return <AuthContext.Provider value={value}>{children}</AuthContext.Provider>;

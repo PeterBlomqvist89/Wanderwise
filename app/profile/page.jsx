@@ -5,13 +5,12 @@ import { useRouter } from "next/navigation";
 import { db, storage } from "../../firebaseConfig";
 import { doc, getDoc, setDoc } from "firebase/firestore";
 import { ref, uploadBytes, getDownloadURL } from "firebase/storage";
-import { updateProfile } from "firebase/auth";
 import toast from "react-hot-toast";
 import { useAuth } from "../components/AuthContextProvider";
 import { Settings } from "lucide-react";
 
 const Profile = () => {
-  const { user, authLoaded } = useAuth();
+  const { user, authLoaded, updateUserProfile } = useAuth(); // Lägger till updateUserProfile
   const [userData, setUserData] = useState({
     name: "",
     bio: "",
@@ -21,7 +20,6 @@ const Profile = () => {
     avatar: "",
   });
   const [isEditing, setIsEditing] = useState(false);
-  const [newAvatar, setNewAvatar] = useState(null);
   const router = useRouter();
 
   const capitalizeFirstLetter = (str) => {
@@ -49,26 +47,21 @@ const Profile = () => {
   const handleAvatarChange = async (e) => {
     if (e.target.files && e.target.files[0]) {
       const file = e.target.files[0];
-      setNewAvatar(file);
-
-      // Visa förhandsvisningen omedelbart
       setUserData({ ...userData, avatar: URL.createObjectURL(file) });
 
       try {
-        // Ladda upp till Firebase Storage
         const avatarRef = ref(storage, `avatars/${user.uid}`);
         await uploadBytes(avatarRef, file);
         const avatarURL = await getDownloadURL(avatarRef);
-
-        // Uppdatera användarens profil i Firebase Authentication och Firestore
-        await updateProfile(user, { photoURL: avatarURL });
-        setUserData({ ...userData, avatar: avatarURL }); // Uppdatera förhandsvisning med URL från Firebase
 
         await setDoc(
           doc(db, "users", user.uid),
           { avatar: avatarURL },
           { merge: true }
         );
+
+        await updateUserProfile({ photoURL: avatarURL }); // Uppdaterar photoURL i AuthContext
+
         toast.success("Avatar updated successfully!");
       } catch (error) {
         console.error("Error updating avatar:", error);
@@ -77,11 +70,9 @@ const Profile = () => {
     }
   };
 
-  // Spara ändringar i Firestore
   const handleSave = async () => {
     if (user) {
       try {
-        // Spara användardata i Firestore
         await setDoc(doc(db, "users", user.uid), userData, { merge: true });
         setIsEditing(false);
         toast.success("Profile updated successfully!");
@@ -100,6 +91,8 @@ const Profile = () => {
     return <div>Loading...</div>;
   }
 
+  const avatarUrl = user?.photoURL; // Användarens avatar från Firebase
+
   return (
     <div className="flex flex-col items-center p-8 min-h-screen pb-32">
       <h1 className="text-6xl font-bold mb-6 text-brunswickgreen">
@@ -110,7 +103,7 @@ const Profile = () => {
       <div className="relative w-[249px] h-[249px] ">
         <div className="w-full h-full rounded-full overflow-hidden border-4 border-brunswickgreen drop-shadow-xl">
           <img
-            src={userData.avatar || "/images/default-avatar.jpg"}
+            src={userData.avatar || avatarUrl || "/images/default-avatar.jpg"}
             alt="Avatar"
             className="w-full h-full object-cover"
           />
