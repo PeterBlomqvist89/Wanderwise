@@ -10,7 +10,7 @@ import { useAuth } from "../components/AuthContextProvider";
 import { Settings } from "lucide-react";
 
 const Profile = () => {
-  const { user, authLoaded, updateUserProfile } = useAuth(); // Lägger till updateUserProfile
+  const { user, authLoaded, updateUserProfile } = useAuth();
   const [userData, setUserData] = useState({
     name: "",
     bio: "",
@@ -34,7 +34,14 @@ const Profile = () => {
         const docRef = doc(db, "users", user.uid);
         const docSnap = await getDoc(docRef);
         if (docSnap.exists()) {
-          setUserData(docSnap.data());
+          setUserData({
+            name: docSnap.data().name || "",
+            bio: docSnap.data().bio || "",
+            location: docSnap.data().location || "",
+            email: docSnap.data().email || "",
+            phone: docSnap.data().phone || "",
+            avatar: docSnap.data().avatar || "",
+          });
         } else {
           setUserData({ ...userData, email: user.email || "" });
         }
@@ -43,7 +50,6 @@ const Profile = () => {
     }
   }, [user, authLoaded, router]);
 
-  // Hantera avatar-ändring och direkt uppladdning till Firebase
   const handleAvatarChange = async (e) => {
     if (e.target.files && e.target.files[0]) {
       const file = e.target.files[0];
@@ -60,7 +66,7 @@ const Profile = () => {
           { merge: true }
         );
 
-        await updateUserProfile({ photoURL: avatarURL }); // Uppdaterar photoURL i AuthContext
+        await updateUserProfile({ photoURL: avatarURL });
 
         toast.success("Avatar updated successfully!");
       } catch (error) {
@@ -91,7 +97,7 @@ const Profile = () => {
     return <div>Loading...</div>;
   }
 
-  const avatarUrl = user?.photoURL; // Användarens avatar från Firebase
+  const avatarUrl = user?.photoURL;
 
   return (
     <div className="flex flex-col items-center p-8 min-h-screen pb-32">
@@ -99,7 +105,6 @@ const Profile = () => {
         Hello {displayName}
       </h1>
 
-      {/* Avatar och Ändra knapp */}
       <div className="relative w-[249px] h-[249px] ">
         <div className="w-full h-full rounded-full overflow-hidden border-4 border-brunswickgreen drop-shadow-xl">
           <img
@@ -123,7 +128,6 @@ const Profile = () => {
         </label>
       </div>
 
-      {/* Profilinformation och knappar */}
       <div className="mt-12 bg-brunswickgreen p-6 rounded-lg w-full max-w-[720px] text-white space-y-4">
         {isEditing ? (
           <>
@@ -131,7 +135,7 @@ const Profile = () => {
               <label>Name:</label>
               <input
                 type="text"
-                value={userData.name}
+                value={userData.name || ""}
                 onChange={(e) =>
                   setUserData({ ...userData, name: e.target.value })
                 }
@@ -142,7 +146,7 @@ const Profile = () => {
               <label>Bio:</label>
               <input
                 type="text"
-                value={userData.bio}
+                value={userData.bio || ""}
                 onChange={(e) =>
                   setUserData({ ...userData, bio: e.target.value })
                 }
@@ -153,7 +157,7 @@ const Profile = () => {
               <label>Location:</label>
               <input
                 type="text"
-                value={userData.location}
+                value={userData.location || ""}
                 onChange={(e) =>
                   setUserData({ ...userData, location: e.target.value })
                 }
@@ -164,7 +168,7 @@ const Profile = () => {
               <label>Phone:</label>
               <input
                 type="tel"
-                value={userData.phone}
+                value={userData.phone || ""}
                 onChange={(e) =>
                   setUserData({ ...userData, phone: e.target.value })
                 }
@@ -213,7 +217,6 @@ const Profile = () => {
           </>
         )}
 
-        {/* Edit och Save Knapp */}
         <div className="flex justify-center space-x-4 mt-6">
           {isEditing ? (
             <button
