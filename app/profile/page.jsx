@@ -123,7 +123,7 @@ const Profile = () => {
         </label>
       </div>
 
-      {/* Profilinformation */}
+      {/* Profilinformation och knappar */}
       <div className="mt-12 bg-brunswickgreen p-6 rounded-lg w-full max-w-[720px] text-white space-y-4">
         {isEditing ? (
           <>
@@ -212,25 +212,25 @@ const Profile = () => {
             </div>
           </>
         )}
-      </div>
 
-      {/* Edit och Save Knapp */}
-      <div className="flex space-x-4 mt-6">
-        {isEditing ? (
-          <button
-            onClick={handleSave}
-            className="text-xl text-timberwolf font-medium px-8 py-2 bg-brunswickgreen border-2 border-timberwolf rounded-full hover:bg-timberwolf hover:text-brunswickgreen hover:border-brunswickgreen"
-          >
-            Save Changes
-          </button>
-        ) : (
-          <button
-            onClick={() => setIsEditing(true)}
-            className="text-xl text-timberwolf font-medium px-8 py-2 bg-brunswickgreen border-2 border-timberwolf rounded-full hover:bg-timberwolf hover:text-brunswickgreen hover:border-brunswickgreen"
-          >
-            Edit Profile
-          </button>
-        )}
+        {/* Edit och Save Knapp */}
+        <div className="flex justify-center space-x-4 mt-6">
+          {isEditing ? (
+            <button
+              onClick={handleSave}
+              className="text-xl text-brunswickgreen font-medium px-8 py-2 bg-timberwolf border-2 border-timberwolf rounded-full hover:bg-brunswickgreen hover:text-timberwolf hover:border-timberwolf"
+            >
+              Save Changes
+            </button>
+          ) : (
+            <button
+              onClick={() => setIsEditing(true)}
+              className="text-xl text-brunswickgreen font-medium px-8 py-2 bg-timberwolf border-2 border-timberwolf rounded-full hover:bg-brunswickgreen hover:text-timberwolf hover:border-timberwolf"
+            >
+              Edit Profile
+            </button>
+          )}
+        </div>
       </div>
     </div>
   );

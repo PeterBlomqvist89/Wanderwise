@@ -6,8 +6,7 @@
   "owner": [
     {
       "name": "Jane Doe",
-      "contact": "jane@example.com",
-      "verified": true
+      "contact": "jane@example.com"
     }
   ],
   "cleaning_fee": 50,
