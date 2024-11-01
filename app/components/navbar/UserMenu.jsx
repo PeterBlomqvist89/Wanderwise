@@ -1,7 +1,6 @@
-// uppdaterad UserMenu-komponent
 "use client";
 
-import { useCallback, useEffect, useState } from "react";
+import { useCallback, useEffect, useRef, useState } from "react";
 import { useRouter } from "next/navigation";
 import { auth } from "../../../firebaseConfig";
 import { onAuthStateChanged, signOut } from "firebase/auth";
@@ -13,6 +12,7 @@ const UserMenu = () => {
   const router = useRouter();
   const [isOpen, setIsOpen] = useState(false);
   const [isLoggedIn, setIsLoggedIn] = useState(false);
+  const menuRef = useRef(null); // Ref för att referera till menyn
 
   const toggleOpen = useCallback(() => {
     setIsOpen((value) => !value);
@@ -26,26 +26,40 @@ const UserMenu = () => {
     return () => unsubscribe();
   }, []);
 
+  useEffect(() => {
+    // Stäng menyn om användaren klickar utanför
+    const handleClickOutside = (event) => {
+      if (menuRef.current && !menuRef.current.contains(event.target)) {
+        setIsOpen(false);
+      }
+    };
+
+    document.addEventListener("mousedown", handleClickOutside);
+
+    return () => {
+      document.removeEventListener("mousedown", handleClickOutside);
+    };
+  }, []);
+
   const handleLogout = async () => {
     await signOut(auth);
-    setIsLoggedIn(false); // Manuellt sätt isLoggedIn till false
+    setIsLoggedIn(false);
     setIsOpen(false);
     toast.success("Successfully signed out!");
 
-    // Fördröj omdirigering för att säkerställa att användaren loggas ut innan sidan byts
     setTimeout(() => {
       router.push("/");
     }, 10);
   };
 
   return (
-    <div className="relative">
+    <div className="relative" ref={menuRef}>
       <div onClick={toggleOpen} className="cursor-pointer">
         <Avatar />
       </div>
 
       {isOpen && (
-        <div className="absolute right-0 mt-2 w-[20vh] bg-timberwolf border border-gray-300 rounded-lg shadow-lg z-50">
+        <div className="absolute right-0 mt-2 w-[30vh] bg-timberwolf border border-gray-300 rounded-lg shadow-lg z-50">
           {isLoggedIn ? (
             <>
               <MenuItem
