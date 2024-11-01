@@ -117,13 +117,13 @@ const AddListingPage = () => {
     price: 0,
     rating: 0,
     description: "",
-    cleaning_fee: 0,
-    wanderwise_fee: 0,
+    cleaning_fee: 50,
+    wanderwise_fee: 20,
     amenities: "",
     address: "",
     latitude: 0,
     longitude: 0,
-    cancellation_policy: "",
+    cancellation_policy: "Free cancellation within 48 hours of booking",
     max_guests: 0,
   });
   const [selectedCategory, setSelectedCategory] = useState(null);
