@@ -1,7 +1,10 @@
 import { Search, Settings2 } from "lucide-react";
-import React from "react";
+import React, { useState } from "react";
+import SearchModal from "../SearchModal";
 
 const Searchbar = () => {
+  const [isModalOpen, setModalOpen] = useState(false);
+
   return (
     <div className="flex items-center">
       <div className="relative flex-grow w-[500px]">
@@ -22,7 +25,9 @@ const Searchbar = () => {
         color="var(--brunswickgreen)"
         size={28}
         className="ml-2 cursor-pointer"
+        onClick={() => setModalOpen(true)}
       />
+      <SearchModal isOpen={isModalOpen} onClose={() => setModalOpen(false)} />
     </div>
   );
 };

@@ -221,14 +221,14 @@ const Profile = () => {
           {isEditing ? (
             <button
               onClick={handleSave}
-              className="text-xl text-brunswickgreen font-medium px-8 py-2 bg-timberwolf border-2 border-timberwolf rounded-full hover:bg-brunswickgreen hover:text-timberwolf hover:border-timberwolf"
+              className="text-xl text-brunswickgreen font-medium px-8 py-2 bg-timberwolf border-2 border-timberwolf rounded-full hover:bg-brunswickgreen hover:text-timberwolf hover:border-timberwolf mt-2"
             >
               Save Changes
             </button>
           ) : (
             <button
               onClick={() => setIsEditing(true)}
-              className="text-xl text-brunswickgreen font-medium px-8 py-2 bg-timberwolf border-2 border-timberwolf rounded-full hover:bg-brunswickgreen hover:text-timberwolf hover:border-timberwolf"
+              className="text-xl text-brunswickgreen font-medium px-8 py-2 bg-timberwolf border-2 border-timberwolf rounded-full hover:bg-brunswickgreen hover:text-timberwolf hover:border-timberwolf mt-2"
             >
               Edit Profile
             </button>

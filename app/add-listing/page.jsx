@@ -8,106 +8,10 @@ import { toast } from "react-hot-toast";
 import CategoryModal from "../components/CategoryModal";
 import { useAuth } from "../components/AuthContextProvider";
 
-import { TbBeach, TbMountain, TbPool } from "react-icons/tb";
-import {
-  GiWindmill,
-  GiIsland,
-  GiBoatFishing,
-  GiCastle,
-  GiForestCamp,
-  GiCaveEntrance,
-  GiCactus,
-  GiBarn,
-} from "react-icons/gi";
-import { MdOutlineVilla } from "react-icons/md";
-import { FaSkiing } from "react-icons/fa";
-import { BsSnow } from "react-icons/bs";
-import { IoDiamond } from "react-icons/io5";
-import { House, ImageUp } from "lucide-react";
+import { CircleX, House, ImageUp } from "lucide-react";
 import { useRouter } from "next/navigation";
 
-export const categories = [
-  {
-    label: "Beach",
-    icon: TbBeach,
-    description: "This property is close to the beach!",
-  },
-  {
-    label: "Windmills",
-    icon: GiWindmill,
-    description: "This property has windmills!",
-  },
-  {
-    label: "Modern",
-    icon: MdOutlineVilla,
-    description: "This property is modern!",
-  },
-  {
-    label: "Countryside",
-    icon: TbMountain,
-    description: "This property is in the countryside!",
-  },
-  {
-    label: "Pools",
-    icon: TbPool,
-    description: "This property has a pool!",
-  },
-  {
-    label: "Islands",
-    icon: GiIsland,
-    description: "This property is on an island!",
-  },
-  {
-    label: "Lake",
-    icon: GiBoatFishing,
-    description: "This property is close to a lake!",
-  },
-  {
-    label: "Skiing",
-    icon: FaSkiing,
-    description: "This property has skiing activities!",
-  },
-  {
-    label: "Castles",
-    icon: GiCastle,
-    description: "This property is in a castle!",
-  },
-  {
-    label: "Camping",
-    icon: GiForestCamp,
-    description: "This property has camping activities!",
-  },
-  {
-    label: "Arctic",
-    icon: BsSnow,
-    description: "This property is in the arctic!",
-  },
-  {
-    label: "Cave",
-    icon: GiCaveEntrance,
-    description: "This property is a cave!",
-  },
-  {
-    label: "Desert",
-    icon: GiCactus,
-    description: "This property is in the desert!",
-  },
-  {
-    label: "Barns",
-    icon: GiBarn,
-    description: "This property is a barn!",
-  },
-  {
-    label: "Luxury",
-    icon: IoDiamond,
-    description: "This property is luxurious!",
-  },
-  {
-    label: "Cabin",
-    icon: House,
-    description: "This property is a cabin!",
-  },
-];
+import { categories } from "../components/Categories";
 
 const AddListingPage = () => {
   const router = useRouter();
@@ -118,7 +22,7 @@ const AddListingPage = () => {
     rating: 0,
     description: "",
     cleaning_fee: 50,
-    wanderwise_fee: 20,
+    wanderwise_fee: 0,
     amenities: "",
     address: "",
     latitude: 0,
@@ -141,11 +45,16 @@ const AddListingPage = () => {
   };
 
   const handleImageChange = (e) => {
-    setImages(Array.from(e.target.files));
+    const selectedFiles = Array.from(e.target.files);
+    setImages((prevImages) => [...prevImages, ...selectedFiles]);
   };
 
   const handleBrowseClick = () => {
     fileInputRef.current.click();
+  };
+
+  const handleRemoveImage = (index) => {
+    setImages((prevImages) => prevImages.filter((_, i) => i !== index));
   };
 
   const handleSubmit = async (e) => {
@@ -277,7 +186,9 @@ const AddListingPage = () => {
             required
           />
           <div className="flex gap-2 ">
-            <label className="font-bold mt-2 mb-4">Upload Images:</label>
+            <label className="font-bold mt-2 mb-4">
+              Upload (multiple) Images:
+            </label>
             <input
               type="file"
               multiple
@@ -292,6 +203,27 @@ const AddListingPage = () => {
               className="hover:scale-125 cursor-pointer"
             />
           </div>
+
+          {images.length > 0 && (
+            <div className="grid grid-cols-3 gap-2 mt-4">
+              {images.map((image, index) => (
+                <div key={index} className="relative w-full h-24">
+                  <img
+                    src={URL.createObjectURL(image)}
+                    alt="Listing Preview"
+                    className="object-cover w-full h-full rounded"
+                  />
+                  <button
+                    type="button"
+                    onClick={() => handleRemoveImage(index)}
+                    className="absolute top-1 right-1 bg-red-500 text-white rounded-full p-1 hover:bg-red-700"
+                  >
+                    <CircleX size={20} />
+                  </button>
+                </div>
+              ))}
+            </div>
+          )}
 
           <div className="flex justify-center ">
             <button
