@@ -4,15 +4,17 @@ import React, { useEffect, useState } from "react";
 import { useParams } from "next/navigation";
 import { doc, getDoc } from "firebase/firestore";
 import { db } from "../../../firebaseConfig";
-// import { MapContainer, TileLayer, Marker } from "react-leaflet";
-// import "leaflet/dist/leaflet.css";
+import Avatar from "@/app/components/Avatar";
+import { CircleArrowLeft, CircleArrowRight, CircleX } from "lucide-react";
 
-const DetailPage = () => {
+const Listings = () => {
   const { id } = useParams(); // Get the listing ID from the URL
   const [listing, setListing] = useState(null);
   const [guests, setGuests] = useState(1);
   const [checkIn, setCheckIn] = useState("");
   const [checkOut, setCheckOut] = useState("");
+  const [isModalOpen, setModalOpen] = useState(false);
+  const [currentImageIndex, setCurrentImageIndex] = useState(0);
 
   useEffect(() => {
     const fetchListing = async () => {
@@ -29,7 +31,6 @@ const DetailPage = () => {
     return <p>Loading...</p>;
   }
 
-  // Calculation for total price
   const numberOfNights =
     checkIn && checkOut
       ? (new Date(checkOut) - new Date(checkIn)) / (1000 * 60 * 60 * 24)
@@ -39,40 +40,66 @@ const DetailPage = () => {
   const wanderwiseFee = listing.wanderwise_fee || 0;
   const grandTotal = totalPrice + cleaningFee + wanderwiseFee;
 
+  const openModal = (index) => {
+    setCurrentImageIndex(index);
+    setModalOpen(true);
+  };
+
+  const closeModal = () => {
+    setModalOpen(false);
+  };
+
+  const goToNextImage = () => {
+    setCurrentImageIndex((prevIndex) =>
+      prevIndex === listing.images.length - 1 ? 0 : prevIndex + 1
+    );
+  };
+
+  const goToPreviousImage = () => {
+    setCurrentImageIndex((prevIndex) =>
+      prevIndex === 0 ? listing.images.length - 1 : prevIndex - 1
+    );
+  };
+
   return (
     <div className="container mx-auto p-8 space-y-8 max-w-[1000px]">
-      {/* Location and Images */}
-      <h1 className="text-3xl font-bold">{listing.location.address}</h1>
+      <h1 className="text-xl font-bold -mb-4">{listing.address}</h1>
 
-      <div className="grid grid-cols-3 gap-4">
-        <div className="col-span-2">
-          <img
-            src={listing.images[0]?.url}
-            alt="Main Listing Image"
-            className="w-full h-80 object-cover rounded-lg"
-          />
-        </div>
-        <div className="grid grid-cols-2 gap-4">
-          <img
-            src={listing.images[1]?.url || "/images/default-image.jpg"}
-            alt="Listing Image 2"
-            className="w-full h-40 object-cover rounded-lg"
-          />
-          <img
-            src={listing.images[2]?.url || "/images/default-image.jpg"}
-            alt="Listing Image 3"
-            className="w-full h-40 object-cover rounded-lg"
-          />
-        </div>
-      </div>
+      {/* Images and Description side by side */}
+      <div className="flex flex-col lg:flex-row gap-8">
+        {/* Images Section */}
+        <div className="flex-1 space-y-3">
+          <div className="w-full">
+            <img
+              src={listing.images[0]?.url}
+              alt="Main Listing Image"
+              className="w-full h-80 object-cover rounded-lg cursor-pointer"
+              style={{ width: "508px", height: "270px", maxWidth: "100%" }}
+              onClick={() => openModal(0)}
+            />
+          </div>
+          <div className="grid grid-cols-2 gap-4">
+            {listing.images.slice(1, 3).map((image, index) => (
+              <img
+                key={index + 1}
+                src={image.url || "/images/default-image.jpg"}
+                alt={`Listing Image ${index + 2}`}
+                className="w-full h-40 object-cover rounded-lg cursor-pointer"
+                style={{ width: "246px", height: "190px", maxWidth: "100%" }}
+                onClick={() => openModal(index + 1)}
+              />
+            ))}
+          </div>
 
-      {/* Price per night and Description */}
-      <div className="flex space-x-8">
-        <div>
-          <p className="text-xl font-semibold">
-            Price per night: ${listing.price}
-          </p>
+          {/* Price per night under the two images */}
+          <div className="mt-4">
+            <p className="text-xl font-semibold">
+              Price per night: ${listing.price}
+            </p>
+          </div>
         </div>
+
+        {/* Description Section */}
         <div className="flex-1 space-y-4">
           <p>{listing.description}</p>
           <hr className="my-4" />
@@ -88,22 +115,56 @@ const DetailPage = () => {
         </div>
       </div>
 
-      {/* Map and Host Info */}
-      {/* <div className="flex space-x-8">
-        <MapContainer
-          center={[listing.location.latitude, listing.location.longitude]}
-          zoom={13}
-          scrollWheelZoom={false}
-          className="w-1/2 h-64 rounded-lg"
-        >
-          <TileLayer
-            url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
-            attribution='&copy; <a href="https://osm.org/copyright">OpenStreetMap</a> contributors'
-          />
-          <Marker
-            position={[listing.location.latitude, listing.location.longitude]}
-          />
-        </MapContainer>
+      {/* Modal for image gallery */}
+      {isModalOpen && (
+        <div className="fixed inset-0 bg-black bg-opacity-75 flex items-center justify-center z-50">
+          <button
+            onClick={closeModal}
+            className="absolute top-4 right-4 text-white"
+          >
+            <CircleX size={32} />
+          </button>
+          <div className="relative">
+            <img
+              src={listing.images[currentImageIndex]?.url}
+              alt={`Image ${currentImageIndex + 1}`}
+              className="w-full max-w-lg h-auto rounded-lg"
+            />
+            <button
+              onClick={goToPreviousImage}
+              className="absolute left-2 top-1/2 transform -translate-y-1/2 text-white"
+            >
+              <CircleArrowLeft size={32} />
+            </button>
+            <button
+              onClick={goToNextImage}
+              className="absolute right-2 top-1/2 transform -translate-y-1/2 text-white"
+            >
+              <CircleArrowRight size={32} />
+            </button>
+          </div>
+        </div>
+      )}
+
+      {/* Price per night and Description */}
+      <div className="flex space-x-8">
+        <div className="flex-1 space-y-4">
+          <p>{listing.description}</p>
+          <hr className="my-4" />
+          <h2 className="text-xl font-semibold">Amenities</h2>
+          <ul className="list-disc list-inside space-y-1">
+            {listing.amenities.map((amenity, index) => (
+              <li key={index}>{amenity}</li>
+            ))}
+          </ul>
+          <hr className="my-4" />
+          <h2 className="text-xl font-semibold">Cancellation Policy</h2>
+          <p>{listing.cancellation_policy}</p>
+        </div>
+      </div>
+
+      {/* Map Container */}
+      <div className="flex space-x-8">
         <div className="w-1/2 p-4 border rounded-lg">
           <Avatar
             size={64}
@@ -115,7 +176,7 @@ const DetailPage = () => {
         </div>
       </div>
 
-      <hr className="my-8" /> */}
+      <hr className="my-8" />
 
       {/* Booking Details */}
       <div className="p-8 border rounded-lg space-y-4">
@@ -190,4 +251,4 @@ const DetailPage = () => {
   );
 };
 
-export default DetailPage;
+export default Listings;
