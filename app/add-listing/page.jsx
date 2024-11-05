@@ -27,7 +27,8 @@ const AddListingPage = () => {
     address: "",
     latitude: 0,
     longitude: 0,
-    cancellation_policy: "Free cancellation within 48 hours of booking",
+    cancellation_policy:
+      "Cancel up to 24 hours before your stay for a full refund. Cancellations made less than 24 hours before the stay will incur a 50% charge.",
     max_guests: 0,
   });
   const [selectedCategory, setSelectedCategory] = useState(null);

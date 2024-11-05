@@ -6,9 +6,10 @@ import { doc, getDoc } from "firebase/firestore";
 import { db } from "../../../firebaseConfig";
 import Avatar from "@/app/components/Avatar";
 import { CircleArrowLeft, CircleArrowRight, CircleX } from "lucide-react";
+import AmenityList from "@/app/components/AmenityList";
 
 const Listings = () => {
-  const { id } = useParams(); // Get the listing ID from the URL
+  const { id } = useParams();
   const [listing, setListing] = useState(null);
   const [guests, setGuests] = useState(1);
   const [checkIn, setCheckIn] = useState("");
@@ -63,19 +64,17 @@ const Listings = () => {
 
   return (
     <div className="container mx-auto p-8 space-y-8 max-w-[1000px]">
-      <CircleArrowLeft size={50} strokeWidth={1} />
-      <h1 className="text-xl font-semibold -mb-4">{listing.address}</h1>
+      <h1 className="text-xl font-semibold -mb-6">{listing.address}</h1>
 
       {/* Images and Description side by side */}
-      <div className="flex flex-col lg:flex-row gap-8">
+      <div className="flex flex-col lg:flex-row gap-8 ">
         {/* Images Section */}
-        <div className="flex-1 space-y-3">
+        <div className="lg:w-2/3 w-full space-y-3 ">
           <div className="w-full">
             <img
               src={listing.images[0]?.url}
               alt="Main Listing Image"
-              className="w-full h-80 object-cover rounded-lg cursor-pointer"
-              style={{ width: "508px", height: "270px", maxWidth: "100%" }}
+              className="w-full h-64 object-cover rounded-lg cursor-pointer"
               onClick={() => openModal(0)}
             />
           </div>
@@ -85,8 +84,7 @@ const Listings = () => {
                 key={index + 1}
                 src={image.url || "/images/default-image.jpg"}
                 alt={`Listing Image ${index + 2}`}
-                className="w-full h-40 object-cover rounded-lg cursor-pointer"
-                style={{ width: "246px", height: "190px", maxWidth: "100%" }}
+                className="w-full h-48 object-cover rounded-lg cursor-pointer"
                 onClick={() => openModal(index + 1)}
               />
             ))}
@@ -101,18 +99,14 @@ const Listings = () => {
         </div>
 
         {/* Description Section */}
-        <div className="flex-1 space-y-4">
-          <p>{listing.description}</p>
-          <hr className="my-4" />
-          <h2 className="text-xl font-semibold">Amenities</h2>
-          <ul className="list-disc list-inside space-y-1">
-            {listing.amenities.map((amenity, index) => (
-              <li key={index}>{amenity}</li>
-            ))}
-          </ul>
-          <hr className="my-4" />
-          <h2 className="text-xl font-semibold">Cancellation Policy</h2>
-          <p>{listing.cancellation_policy}</p>
+        <div className="lg:w-1/3 w-full space-y-4">
+          <p className="border-b-2 border-gray-500 pb-8">
+            {listing.description}
+          </p>
+          <AmenityList amenities={listing.amenities} />
+          <div className="border-2 text-sm font-light border-brunswickgreen p-4 rounded-xl">
+            <p>{listing.cancellation_policy}</p>
+          </div>
         </div>
       </div>
 
@@ -147,26 +141,9 @@ const Listings = () => {
         </div>
       )}
 
-      {/* Price per night and Description */}
+      {/* Map and Host Info */}
       <div className="flex space-x-8">
-        <div className="flex-1 space-y-4">
-          <p>{listing.description}</p>
-          <hr className="my-4" />
-          <h2 className="text-xl font-semibold">Amenities</h2>
-          <ul className="list-disc list-inside space-y-1">
-            {listing.amenities.map((amenity, index) => (
-              <li key={index}>{amenity}</li>
-            ))}
-          </ul>
-          <hr className="my-4" />
-          <h2 className="text-xl font-semibold">Cancellation Policy</h2>
-          <p>{listing.cancellation_policy}</p>
-        </div>
-      </div>
-
-      {/* Map Container */}
-      <div className="flex space-x-8">
-        <div className="w-1/2 p-4 border rounded-lg">
+        <div className="w-full lg:w-1/2 p-4 border rounded-lg">
           <Avatar
             avatarUrl={listing.owner[0]?.avatar || "/images/default-avatar.jpg"}
             className="mb-4"

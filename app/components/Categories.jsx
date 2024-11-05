@@ -14,7 +14,7 @@ import { MdOutlineVilla } from "react-icons/md";
 import { FaSkiing } from "react-icons/fa";
 import { BsSnow } from "react-icons/bs";
 import { IoDiamond } from "react-icons/io5";
-import { House } from "lucide-react";
+import { Caravan, House } from "lucide-react";
 
 export const categories = [
   {
@@ -88,13 +88,13 @@ export const categories = [
     description: "This property is a barn!",
   },
   {
-    label: "Luxury",
-    icon: IoDiamond,
-    description: "This property is luxurious!",
-  },
-  {
     label: "Cabin",
     icon: House,
     description: "This property is a cabin!",
+  },
+  {
+    label: "Caravan",
+    icon: Caravan,
+    description: "This property is a caravan!",
   },
 ];
