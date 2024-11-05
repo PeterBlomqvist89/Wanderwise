@@ -29,9 +29,7 @@ export default function ListingCard({ listing, variant, onClick }) {
             </p>
           </div>
         </div>
-        <p className="text-sm font-semibold text-black">
-          {listing.location.address}
-        </p>
+        <p className="text-sm font-semibold text-black">{listing.address}</p>
       </div>
     </div>
   );

@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useRef } from "react";
+import { useState, useRef, useEffect } from "react";
 import { db, storage } from "../../firebaseConfig";
 import { addDoc, collection } from "firebase/firestore";
 import { ref, uploadBytes, getDownloadURL } from "firebase/storage";
@@ -35,6 +35,14 @@ const AddListingPage = () => {
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [isModalOpen, setIsModalOpen] = useState(false);
   const fileInputRef = useRef(null);
+
+  // Redirect to login if user is not authenticated
+  useEffect(() => {
+    if (!user) {
+      toast.error("You need to be logged in to add a listing.");
+      router.push("/auth/sign-in");
+    }
+  }, [user, router]);
 
   const handleInputChange = (e) => {
     const { name, value } = e.target;
@@ -84,6 +92,7 @@ const AddListingPage = () => {
           {
             name: user?.displayName || "N/A",
             contact: user?.email || "N/A",
+            avatar: user?.photoURL || "/images/default-avatar.jpg", // Include avatar here
           },
         ],
         property_type: selectedCategory
@@ -104,6 +113,14 @@ const AddListingPage = () => {
       setIsSubmitting(false);
     }
   };
+
+  if (!user) {
+    return (
+      <p className="text-center text-red-500">
+        You need to log in to access this page.
+      </p>
+    );
+  }
 
   return (
     <div className="max-w-2xl mx-auto p-8">

@@ -167,8 +167,7 @@ const Listings = () => {
       <div className="flex space-x-8">
         <div className="w-1/2 p-4 border rounded-lg">
           <Avatar
-            size={64}
-            src={listing.owner[0]?.avatar || "/images/default-avatar.jpg"}
+            avatarUrl={listing.owner[0]?.avatar || "/images/default-avatar.jpg"}
             className="mb-4"
           />
           <h3 className="text-lg font-semibold">{listing.owner[0]?.name}</h3>
