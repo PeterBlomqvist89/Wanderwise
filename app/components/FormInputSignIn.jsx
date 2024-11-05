@@ -70,7 +70,7 @@ const FormInputSignIn = () => {
         </div>
       </form>
 
-      <p className="text-lg mt-6">
+      <p className=" text-center text-lg mt-6">
         Not a member? Create an account{" "}
         <span
           onClick={() => router.push("/auth/sign-up")}

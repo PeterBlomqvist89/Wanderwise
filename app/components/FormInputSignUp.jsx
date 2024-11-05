@@ -81,7 +81,7 @@ const FormInput = () => {
           </button>
         </div>
       </form>
-      <p className="text-lg mt-6">
+      <p className="text-center text-lg mt-6">
         Already a member?{" "}
         <span
           onClick={() => router.push("/auth/sign-in")}

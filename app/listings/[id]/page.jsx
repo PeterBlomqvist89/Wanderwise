@@ -63,7 +63,8 @@ const Listings = () => {
 
   return (
     <div className="container mx-auto p-8 space-y-8 max-w-[1000px]">
-      <h1 className="text-xl font-bold -mb-4">{listing.address}</h1>
+      <CircleArrowLeft size={50} strokeWidth={1} />
+      <h1 className="text-xl font-semibold -mb-4">{listing.address}</h1>
 
       {/* Images and Description side by side */}
       <div className="flex flex-col lg:flex-row gap-8">

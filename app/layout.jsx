@@ -1,11 +1,15 @@
+"use client"; // Add this at the top
+
 import { Livvic } from "next/font/google";
 import "./globals.css";
-import Footer from "./components/Footer"; // Importera footern
+import Footer from "./components/Footer";
 import NavbarSmall from "./components/navbar/NavbarSmall";
 import NavbarLarge from "./components/navbar/NavbarLarge";
 import SearchbarSmall from "./components/navbar/SearchbarSmall";
 import { Toaster } from "react-hot-toast";
 import AuthContextProvider from "./components/AuthContextProvider";
+import { usePathname } from "next/navigation"; // Import usePathname
+import LogoSmall from "./components/navbar/LogoSmall";
 
 const livvic = Livvic({
   subsets: ["latin"],
@@ -13,12 +17,14 @@ const livvic = Livvic({
   weight: ["100", "400", "700"],
 });
 
-export const metadata = {
-  title: "Wanderwise",
-  description: "Find your home away from home",
-};
+// export const metadata = {
+//   title: "Wanderwise",
+//   description: "Find your home away from home",
+// };
 
 export default function RootLayout({ children }) {
+  const pathname = usePathname(); // Get the current path
+
   return (
     <html lang="en">
       <body
@@ -28,7 +34,8 @@ export default function RootLayout({ children }) {
           <Toaster />
           <NavbarLarge />
           <NavbarSmall />
-          <SearchbarSmall />
+          {pathname === "/" ? <SearchbarSmall /> : <LogoSmall />}{" "}
+          {/* Conditionally render */}
           <main className="flex-grow">{children}</main>
           <Footer />
         </AuthContextProvider>
