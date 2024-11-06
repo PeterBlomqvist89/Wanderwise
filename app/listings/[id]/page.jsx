@@ -1,25 +1,41 @@
 "use client";
 
 import React, { useEffect, useState } from "react";
-import { useParams } from "next/navigation";
-import { doc, getDoc } from "firebase/firestore";
-import { db } from "../../../firebaseConfig";
+import { useParams, useRouter } from "next/navigation";
+import { doc, getDoc, deleteDoc } from "firebase/firestore";
+import { db, auth } from "../../../firebaseConfig";
+import { onAuthStateChanged } from "firebase/auth";
 import Avatar from "@/app/components/Avatar";
 import { CircleArrowLeft, CircleArrowRight, CircleX } from "lucide-react";
 import AmenityList from "@/app/components/AmenityList";
 import Image from "next/image";
+import { toast } from "react-hot-toast";
 
 const Listings = () => {
   const { id } = useParams();
+  const router = useRouter();
   const [listing, setListing] = useState(null);
+  const [currentUserEmail, setCurrentUserEmail] = useState(null);
   const [guests, setGuests] = useState(1);
   const [checkIn, setCheckIn] = useState("");
   const [checkOut, setCheckOut] = useState("");
   const [isModalOpen, setModalOpen] = useState(false);
   const [currentImageIndex, setCurrentImageIndex] = useState(0);
 
-  const currentUser = { id: "owner_id" }; // Identifiera användaren, anpassa vid behov
+  // Hämta den inloggade användarens email
+  useEffect(() => {
+    const unsubscribe = onAuthStateChanged(auth, (user) => {
+      if (user) {
+        setCurrentUserEmail(user.email);
+      } else {
+        setCurrentUserEmail(null);
+      }
+    });
 
+    return () => unsubscribe();
+  }, []);
+
+  // Hämta listningen från Firestore
   useEffect(() => {
     const fetchListing = async () => {
       const docRef = doc(db, "listings", id);
@@ -34,6 +50,22 @@ const Listings = () => {
   if (!listing) {
     return <p>Loading...</p>;
   }
+
+  // Kontrollera om den inloggade användaren är ägaren
+  const isOwner = currentUserEmail === listing.owner[0].contact;
+
+  // Funktion för att hantera borttagning av listning
+  const handleDelete = async () => {
+    const docRef = doc(db, "listings", id);
+    try {
+      await deleteDoc(docRef);
+      toast.success("Listing deleted successfully!");
+      router.push("/"); // Omdirigera till startsidan efter borttagning
+    } catch (error) {
+      toast.error("Failed to delete listing. Please try again.");
+      console.error("Delete error:", error);
+    }
+  };
 
   const numberOfNights =
     checkIn && checkOut
@@ -64,8 +96,6 @@ const Listings = () => {
       prevIndex === 0 ? listing.images.length - 1 : prevIndex - 1
     );
   };
-
-  const isOwner = currentUser.id === listing.owner_id; // Kontrollera om inloggade användaren är ägaren
 
   return (
     <div className="container mx-auto p-8 space-y-8 max-w-[1000px] mb-8">
@@ -234,7 +264,10 @@ const Listings = () => {
         </div>
 
         {isOwner ? (
-          <button className="w-full mt-4 bg-red-500 text-white py-2 rounded-lg">
+          <button
+            onClick={handleDelete}
+            className="w-full mt-4 bg-red-500 text-white py-2 rounded-lg"
+          >
             Delete this listing
           </button>
         ) : (
