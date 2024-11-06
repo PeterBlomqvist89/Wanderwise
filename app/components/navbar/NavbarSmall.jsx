@@ -1,7 +1,7 @@
 "use client";
 
 import React from "react";
-import { House, Search, UserRoundPen } from "lucide-react";
+import { House, HousePlus, Search, UserRoundPen } from "lucide-react";
 import { useRouter } from "next/navigation";
 
 const NavbarSmall = () => {
@@ -21,6 +21,12 @@ const NavbarSmall = () => {
         size={45}
         className="cursor-pointer"
         onClick={() => router.push("/profile")}
+      />
+      <HousePlus
+        color="var(--timberwolf)"
+        size={45}
+        className="cursor-pointer"
+        onClick={() => router.push("/add-listing")}
       />
     </nav>
   );

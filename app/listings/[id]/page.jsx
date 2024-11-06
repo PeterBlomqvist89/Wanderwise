@@ -63,7 +63,7 @@ const Listings = () => {
   };
 
   return (
-    <div className="container mx-auto p-8 space-y-8 max-w-[1000px]">
+    <div className="container mx-auto p-8 space-y-8 max-w-[1000px]  mb-8">
       <h1 className="text-xl font-semibold -mb-6">{listing.address}</h1>
 
       {/* Images and Description side by side */}
@@ -198,8 +198,8 @@ const Listings = () => {
         <hr className="my-4" />
 
         {/* Price Calculation */}
-        <div className="space-y-2">
-          <div className="flex justify-between">
+        <div className="space-y-2 ">
+          <div className="flex justify-between ">
             <p>
               ${listing.price} x {numberOfNights} nights
             </p>

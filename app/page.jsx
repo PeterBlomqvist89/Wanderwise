@@ -37,6 +37,7 @@ export default function MainPage() {
       <Head>
         <title>Wanderwise</title>
         <meta name="description" content="Find your home away from home" />
+        <link rel="icon" href="/favicon.ico" sizes="any" />
       </Head>
       <div className="p-8 max-w-[1000px] mx-auto flex flex-col grid-cols-1 md:grid-cols-3 gap-4 md:grid">
         {listings.map((listing, index) => (

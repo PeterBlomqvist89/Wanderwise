@@ -2,12 +2,13 @@
 
 import React, { useState, useEffect } from "react";
 import { useRouter } from "next/navigation";
-import { db, storage } from "../../firebaseConfig";
+import { db, storage, auth } from "../../firebaseConfig";
 import { doc, getDoc, setDoc } from "firebase/firestore";
 import { ref, uploadBytes, getDownloadURL } from "firebase/storage";
 import toast from "react-hot-toast";
 import { useAuth } from "../components/AuthContextProvider";
 import { Settings } from "lucide-react";
+import { signOut } from "firebase/auth";
 
 const Profile = () => {
   const { user, authLoaded, updateUserProfile } = useAuth();
@@ -27,28 +28,44 @@ const Profile = () => {
   };
 
   useEffect(() => {
-    if (authLoaded && !user) {
-      router.push("/auth/sign-in");
-    } else if (user) {
-      const fetchUserData = async () => {
-        const docRef = doc(db, "users", user.uid);
-        const docSnap = await getDoc(docRef);
-        if (docSnap.exists()) {
-          setUserData({
-            name: docSnap.data().name || "",
-            bio: docSnap.data().bio || "",
-            location: docSnap.data().location || "",
-            email: docSnap.data().email || "",
-            phone: docSnap.data().phone || "",
-            avatar: docSnap.data().avatar || "",
-          });
-        } else {
-          setUserData({ ...userData, email: user.email || "" });
-        }
-      };
-      fetchUserData();
+    if (authLoaded) {
+      if (!user) {
+        toast.error("You need to be logged in to add a listing.");
+        router.push("/auth/sign-in");
+      } else {
+        const fetchUserData = async () => {
+          const docRef = doc(db, "users", user.uid);
+          const docSnap = await getDoc(docRef);
+          if (docSnap.exists()) {
+            setUserData({
+              name: docSnap.data().name || "",
+              bio: docSnap.data().bio || "",
+              location: docSnap.data().location || "",
+              email: docSnap.data().email || "",
+              phone: docSnap.data().phone || "",
+              avatar: docSnap.data().avatar || "",
+            });
+          } else {
+            setUserData({ ...userData, email: user.email || "" });
+          }
+        };
+        fetchUserData();
+      }
     }
   }, [user, authLoaded, router]);
+
+  const handleLogout = async () => {
+    await signOut(auth);
+    toast.success("Logged out");
+
+    setTimeout(() => {
+      router.push("/");
+    }, 100);
+  };
+
+  if (!authLoaded) {
+    return <div>Loading...</div>; // Visa en laddningsindikator tills authLoaded är true
+  }
 
   const handleAvatarChange = async (e) => {
     if (e.target.files && e.target.files[0]) {
@@ -92,10 +109,6 @@ const Profile = () => {
   const displayName = capitalizeFirstLetter(
     userData.name || user?.email?.split("@")[0] || "User"
   );
-
-  if (!authLoaded) {
-    return <div>Loading...</div>;
-  }
 
   const avatarUrl = user?.photoURL;
 
@@ -226,12 +239,21 @@ const Profile = () => {
               Save Changes
             </button>
           ) : (
-            <button
-              onClick={() => setIsEditing(true)}
-              className="text-xl text-brunswickgreen font-medium px-8 py-2 bg-timberwolf border-2 border-timberwolf rounded-full hover:bg-brunswickgreen hover:text-timberwolf hover:border-timberwolf mt-2"
-            >
-              Edit Profile
-            </button>
+            <>
+              <button
+                onClick={() => setIsEditing(true)}
+                className="text-xl text-brunswickgreen font-medium px-8 py-2 bg-timberwolf border-2 border-timberwolf rounded-full hover:bg-brunswickgreen hover:text-timberwolf hover:border-timberwolf mt-2"
+              >
+                Edit Profile
+              </button>
+              {/* Log Out button - only visible on mobile */}
+              <button
+                onClick={handleLogout}
+                className="text-xl text-brunswickgreen font-medium px-8 py-2 bg-timberwolf border-2 border-timberwolf rounded-full hover:bg-brunswickgreen hover:text-timberwolf hover:border-timberwolf mt-2 block md:hidden"
+              >
+                Log Out
+              </button>
+            </>
           )}
         </div>
       </div>

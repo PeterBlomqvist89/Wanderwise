@@ -8,7 +8,7 @@ import { toast } from "react-hot-toast";
 import CategoryModal from "../components/CategoryModal";
 import { useAuth } from "../components/AuthContextProvider";
 
-import { CircleX, House, ImageUp } from "lucide-react";
+import { CircleX, ImageUp } from "lucide-react";
 import { useRouter } from "next/navigation";
 
 import { categories } from "../components/Categories";
@@ -37,7 +37,6 @@ const AddListingPage = () => {
   const [isModalOpen, setIsModalOpen] = useState(false);
   const fileInputRef = useRef(null);
 
-  // Redirect to login if user is not authenticated
   useEffect(() => {
     if (!user) {
       toast.error("You need to be logged in to add a listing.");
