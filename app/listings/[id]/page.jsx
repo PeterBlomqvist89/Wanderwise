@@ -98,6 +98,24 @@ const Listings = () => {
     );
   };
 
+  const handleBooking = () => {
+    const url = `/confirm-pay?id=${encodeURIComponent(
+      listing.id
+    )}&checkIn=${encodeURIComponent(checkIn)}&checkOut=${encodeURIComponent(
+      checkOut
+    )}&guests=${encodeURIComponent(guests)}&price=${encodeURIComponent(
+      listing.price
+    )}&cleaningFee=${encodeURIComponent(
+      listing.cleaning_fee
+    )}&wanderwiseFee=${encodeURIComponent(
+      listing.wanderwise_fee
+    )}&address=${encodeURIComponent(
+      listing.address
+    )}&description=${encodeURIComponent(listing.description)}`;
+
+    router.push(url);
+  };
+
   return (
     <div className="container mx-auto p-8 space-y-8 max-w-[1000px] mb-16">
       <h1 className="text-xl font-semibold -mb-6">{listing.address}</h1>
@@ -265,7 +283,10 @@ const Listings = () => {
               <p>${grandTotal}</p>
             </div>
           </div>
-          <button className="w-full mt-4 bg-brunswickgreen text-white py-2 rounded-lg">
+          <button
+            className="w-full mt-4 bg-brunswickgreen text-white py-2 rounded-lg border-2 border-brunswickgreen hover:bg-timberwolf hover:text-brunswickgreen hover:border-2 hover:border-brunswickgreen"
+            onClick={handleBooking}
+          >
             Book Here
           </button>
         </div>
@@ -275,7 +296,7 @@ const Listings = () => {
         <div className="mx-auto p-8 border rounded-lg space-y-4 max-w-[550px]">
           <button
             onClick={handleDelete}
-            className="w-full mt-4 bg-red-500 text-white py-2 rounded-lg"
+            className="w-full mt-4 bg-red-500 text-white py-2 rounded-lg hover:bg-red-600"
           >
             Delete this listing
           </button>
