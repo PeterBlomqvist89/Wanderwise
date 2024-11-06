@@ -17,3 +17,12 @@ body,
   --ferngreen: #588157;
   --grey: #3f3f3f;
 }
+
+.rdrMonth {
+  width: 100% !important;
+}
+
+.rdrCalendarWrapper {
+  font-size: 16px !important;
+  width: 100% !important;
+}

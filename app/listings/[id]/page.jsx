@@ -140,7 +140,7 @@ const Listings = () => {
             {listing.description}
           </p>
           <AmenityList amenities={listing.amenities} />
-          <div className="border-2 text-sm font-light border-brunswickgreen p-4 rounded-xl">
+          <div className="border-2 text-sm font-light border-brunswickgreen p-4 rounded-xl shadow-md">
             <p>{listing.cancellation_policy}</p>
           </div>
         </div>
@@ -181,8 +181,8 @@ const Listings = () => {
       )}
 
       {/* Map and Host Info */}
-      <div className="flex lg:space-x-8 flex-col lg:flex-row border-b-2 border-brunswickgreen pb-8">
-        <div className="w-full lg:w-1/2 p-4 rounded-lg">
+      <div className="flex lg:space-x-8 flex-col lg:flex-row border-b-2 border-brunswickgreen pb-8 ">
+        <div className="w-full lg:w-1/2 p-4 rounded-lg shadow-md">
           <Image
             src="/images/dummy-map.jpg"
             alt="Map of the location"
@@ -191,7 +191,7 @@ const Listings = () => {
             className="w-full h-auto rounded-lg"
           />
         </div>
-        <div className="w-full lg:w-1/2 flex flex-col justify-center items-center border-2 font-light border-brunswickgreen p-4 rounded-xl">
+        <div className="w-full lg:w-1/2 flex flex-col justify-center items-center border-2 font-light border-brunswickgreen p-4 rounded-xl shadow-md">
           <Avatar
             avatarUrl={listing.owner[0]?.avatar || "/images/default-avatar.jpg"}
             className="mb-4 h-[125px] w-[125px]"
@@ -204,14 +204,14 @@ const Listings = () => {
 
       {/* Booking Details */}
       {currentUserEmail && !isOwner && (
-        <div className="mx-auto p-8  rounded-lg space-y-4 max-w-[550px] border-2 border-brunswickgreen ">
-          <div className="flex justify-between">
-            <p className="text-lg">Price per night</p>
-            <p className="text-lg font-semibold">${listing.price}</p>
+        <div className="mx-auto p-8  rounded-lg space-y-4 max-w-[550px] border-2 border-brunswickgreen shadow-md">
+          <div className="flex justify-between p-2">
+            <p className="text-xl font-semibold">Price per night</p>
+            <p className="text-xl font-semibold">${listing.price}</p>
           </div>
 
-          <div className="flex justify-between items-center space-y-2">
-            <label>Guests:</label>
+          <div className="flex justify-between items-center space-y-2 border-2 border-brunswickgreen p-2">
+            <label className="text-xl font-semibold">Guests:</label>
             <input
               type="number"
               min="1"
@@ -222,9 +222,9 @@ const Listings = () => {
             />
           </div>
 
-          <div className="flex space-x-4">
+          <div className="flex  border-2 border-brunswickgreen p-2">
             <div>
-              <label>Check-in Date:</label>
+              <label className="text-xl font-semibold">Check-in Date:</label>
               <input
                 type="date"
                 value={checkIn}
@@ -233,7 +233,7 @@ const Listings = () => {
               />
             </div>
             <div>
-              <label>Check-out Date:</label>
+              <label className="text-xl font-semibold">Check-out Date:</label>
               <input
                 type="date"
                 value={checkOut}
@@ -243,26 +243,24 @@ const Listings = () => {
             </div>
           </div>
 
-          <hr className="my-4" />
-
           {/* Price Calculation */}
-          <div className="space-y-2">
+          <div className="space-y-2 p-2">
             <div className="flex justify-between">
-              <p>
+              <p className="text-sm font-semibold">
                 ${listing.price} x {numberOfNights} nights
               </p>
-              <p>${totalPrice}</p>
+              <p className="text-sm font-semibold">${totalPrice}</p>
             </div>
             <div className="flex justify-between">
-              <p>Cleaning Fee</p>
-              <p>${cleaningFee}</p>
+              <p className="text-sm font-semibold">Cleaning Fee</p>
+              <p className="text-sm font-semibold">${cleaningFee}</p>
             </div>
-            <div className="flex justify-between">
-              <p>Wanderwise Fee</p>
-              <p>${wanderwiseFee}</p>
+            <div className="flex justify-between border-b-2 border-brunswickgreen pb-4">
+              <p className="text-sm font-semibold">Wanderwise Fee</p>
+              <p className="text-sm font-semibold">${wanderwiseFee}</p>
             </div>
-            <hr className="my-4" />
-            <div className="flex justify-between font-bold text-lg ">
+
+            <div className="flex justify-between font-bold text-2xl ">
               <p>Total Price</p>
               <p>${grandTotal}</p>
             </div>
