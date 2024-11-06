@@ -35,6 +35,7 @@ import {
 // Define an icon map to match amenities to icons
 const icons = {
   wifi: <Wifi />,
+  "wi-fi": <Wifi />,
   "no wifi": <WifiOff />,
   tv: <Tv />,
   "air conditioning": <AirVent />,

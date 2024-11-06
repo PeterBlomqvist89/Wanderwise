@@ -98,7 +98,7 @@ const Listings = () => {
   };
 
   return (
-    <div className="container mx-auto p-8 space-y-8 max-w-[1000px] mb-8">
+    <div className="container mx-auto p-8 space-y-8 max-w-[1000px] mb-16">
       <h1 className="text-xl font-semibold -mb-6">{listing.address}</h1>
 
       {/* Images and Description side by side */}
@@ -147,7 +147,10 @@ const Listings = () => {
 
       {/* Modal for image gallery */}
       {isModalOpen && (
-        <div className="fixed inset-0 bg-black bg-opacity-75 flex items-center justify-center z-50">
+        <div
+          style={{ height: "100vh", width: "100vw" }}
+          className="fixed inset-0 -top-9 left-0 w-screen h-screen bg-black bg-opacity-75 flex items-center justify-center z-[100] mb-36"
+        >
           <button
             onClick={closeModal}
             className="absolute top-4 right-4 text-white"
@@ -158,7 +161,7 @@ const Listings = () => {
             <img
               src={listing.images[currentImageIndex]?.url}
               alt={`Image ${currentImageIndex + 1}`}
-              className="w-full max-w-lg h-auto rounded-lg"
+              className="w-auto max-w-full max-h-[90vh] rounded-lg"
             />
             <button
               onClick={goToPreviousImage}
@@ -199,83 +202,86 @@ const Listings = () => {
       </div>
 
       {/* Booking Details */}
-      <div className="mx-auto p-8 border rounded-lg space-y-4 max-w-[550px]">
-        <div className="flex justify-between">
-          <p className="text-lg">Price per night</p>
-          <p className="text-lg font-semibold">${listing.price}</p>
-        </div>
+      {currentUserEmail && !isOwner && (
+        <div className="mx-auto p-8 border rounded-lg space-y-4 max-w-[550px]">
+          <div className="flex justify-between">
+            <p className="text-lg">Price per night</p>
+            <p className="text-lg font-semibold">${listing.price}</p>
+          </div>
 
-        <div className="flex justify-between items-center space-y-2">
-          <label>Guests:</label>
-          <input
-            type="number"
-            min="1"
-            max={listing.max_guests}
-            value={guests}
-            onChange={(e) => setGuests(e.target.value)}
-            className="p-2 border rounded"
-          />
-        </div>
-
-        <div className="flex space-x-4">
-          <div>
-            <label>Check-in Date:</label>
+          <div className="flex justify-between items-center space-y-2">
+            <label>Guests:</label>
             <input
-              type="date"
-              value={checkIn}
-              onChange={(e) => setCheckIn(e.target.value)}
+              type="number"
+              min="1"
+              max={listing.max_guests}
+              value={guests}
+              onChange={(e) => setGuests(e.target.value)}
               className="p-2 border rounded"
             />
           </div>
-          <div>
-            <label>Check-out Date:</label>
-            <input
-              type="date"
-              value={checkOut}
-              onChange={(e) => setCheckOut(e.target.value)}
-              className="p-2 border rounded"
-            />
-          </div>
-        </div>
 
-        <hr className="my-4" />
+          <div className="flex space-x-4">
+            <div>
+              <label>Check-in Date:</label>
+              <input
+                type="date"
+                value={checkIn}
+                onChange={(e) => setCheckIn(e.target.value)}
+                className="p-2 border rounded"
+              />
+            </div>
+            <div>
+              <label>Check-out Date:</label>
+              <input
+                type="date"
+                value={checkOut}
+                onChange={(e) => setCheckOut(e.target.value)}
+                className="p-2 border rounded"
+              />
+            </div>
+          </div>
 
-        {/* Price Calculation */}
-        <div className="space-y-2">
-          <div className="flex justify-between">
-            <p>
-              ${listing.price} x {numberOfNights} nights
-            </p>
-            <p>${totalPrice}</p>
-          </div>
-          <div className="flex justify-between">
-            <p>Cleaning Fee</p>
-            <p>${cleaningFee}</p>
-          </div>
-          <div className="flex justify-between">
-            <p>Wanderwise Fee</p>
-            <p>${wanderwiseFee}</p>
-          </div>
           <hr className="my-4" />
-          <div className="flex justify-between font-bold text-lg">
-            <p>Total Price</p>
-            <p>${grandTotal}</p>
-          </div>
-        </div>
 
-        {isOwner ? (
+          {/* Price Calculation */}
+          <div className="space-y-2">
+            <div className="flex justify-between">
+              <p>
+                ${listing.price} x {numberOfNights} nights
+              </p>
+              <p>${totalPrice}</p>
+            </div>
+            <div className="flex justify-between">
+              <p>Cleaning Fee</p>
+              <p>${cleaningFee}</p>
+            </div>
+            <div className="flex justify-between">
+              <p>Wanderwise Fee</p>
+              <p>${wanderwiseFee}</p>
+            </div>
+            <hr className="my-4" />
+            <div className="flex justify-between font-bold text-lg ">
+              <p>Total Price</p>
+              <p>${grandTotal}</p>
+            </div>
+          </div>
+          <button className="w-full mt-4 bg-brunswickgreen text-white py-2 rounded-lg">
+            Book Here
+          </button>
+        </div>
+      )}
+
+      {isOwner && (
+        <div className="mx-auto p-8 border rounded-lg space-y-4 max-w-[550px]">
           <button
             onClick={handleDelete}
             className="w-full mt-4 bg-red-500 text-white py-2 rounded-lg"
           >
             Delete this listing
           </button>
-        ) : (
-          <button className="w-full mt-4 bg-brunswickgreen text-white py-2 rounded-lg">
-            Book Here
-          </button>
-        )}
-      </div>
+        </div>
+      )}
     </div>
   );
 };
