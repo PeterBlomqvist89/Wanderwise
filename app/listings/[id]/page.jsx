@@ -7,6 +7,7 @@ import { db } from "../../../firebaseConfig";
 import Avatar from "@/app/components/Avatar";
 import { CircleArrowLeft, CircleArrowRight, CircleX } from "lucide-react";
 import AmenityList from "@/app/components/AmenityList";
+import Image from "next/image";
 
 const Listings = () => {
   const { id } = useParams();
@@ -16,6 +17,8 @@ const Listings = () => {
   const [checkOut, setCheckOut] = useState("");
   const [isModalOpen, setModalOpen] = useState(false);
   const [currentImageIndex, setCurrentImageIndex] = useState(0);
+
+  const currentUser = { id: "owner_id" }; // Identifiera användaren, anpassa vid behov
 
   useEffect(() => {
     const fetchListing = async () => {
@@ -62,14 +65,16 @@ const Listings = () => {
     );
   };
 
+  const isOwner = currentUser.id === listing.owner_id; // Kontrollera om inloggade användaren är ägaren
+
   return (
-    <div className="container mx-auto p-8 space-y-8 max-w-[1000px]  mb-8">
+    <div className="container mx-auto p-8 space-y-8 max-w-[1000px] mb-8">
       <h1 className="text-xl font-semibold -mb-6">{listing.address}</h1>
 
       {/* Images and Description side by side */}
-      <div className="flex flex-col lg:flex-row gap-8 ">
+      <div className="flex flex-col lg:flex-row gap-8">
         {/* Images Section */}
-        <div className="lg:w-2/3 w-full space-y-3 ">
+        <div className="lg:w-2/3 w-full space-y-3">
           <div className="w-full">
             <img
               src={listing.images[0]?.url}
@@ -100,7 +105,7 @@ const Listings = () => {
 
         {/* Description Section */}
         <div className="lg:w-1/3 w-full space-y-4">
-          <p className="border-b-2 border-gray-500 pb-8">
+          <p className="border-b-2 border-brunswickgreen pb-8">
             {listing.description}
           </p>
           <AmenityList amenities={listing.amenities} />
@@ -142,21 +147,29 @@ const Listings = () => {
       )}
 
       {/* Map and Host Info */}
-      <div className="flex space-x-8">
-        <div className="w-full lg:w-1/2 p-4 border rounded-lg">
+      <div className="flex lg:space-x-8 flex-col lg:flex-row border-b-2 border-brunswickgreen pb-8">
+        <div className="w-full lg:w-1/2 p-4 rounded-lg">
+          <Image
+            src="/images/dummy-map.jpg"
+            alt="Map of the location"
+            width={519}
+            height={297}
+            className="w-full h-auto rounded-lg"
+          />
+        </div>
+        <div className="w-full lg:w-1/2 flex flex-col justify-center items-center border-2 font-light border-brunswickgreen p-4 rounded-xl">
           <Avatar
             avatarUrl={listing.owner[0]?.avatar || "/images/default-avatar.jpg"}
-            className="mb-4"
+            className="mb-4 h-[125px] w-[125px]"
           />
           <h3 className="text-lg font-semibold">{listing.owner[0]?.name}</h3>
-          <p>{listing.owner[0]?.contact}</p>
+          <p>Email: {listing.owner[0]?.contact}</p>
+          <p>Phone: {listing.owner[0]?.phone || "Not available"}</p>
         </div>
       </div>
 
-      <hr className="my-8" />
-
       {/* Booking Details */}
-      <div className="p-8 border rounded-lg space-y-4">
+      <div className="mx-auto p-8 border rounded-lg space-y-4 max-w-[550px]">
         <div className="flex justify-between">
           <p className="text-lg">Price per night</p>
           <p className="text-lg font-semibold">${listing.price}</p>
@@ -198,8 +211,8 @@ const Listings = () => {
         <hr className="my-4" />
 
         {/* Price Calculation */}
-        <div className="space-y-2 ">
-          <div className="flex justify-between ">
+        <div className="space-y-2">
+          <div className="flex justify-between">
             <p>
               ${listing.price} x {numberOfNights} nights
             </p>
@@ -220,9 +233,15 @@ const Listings = () => {
           </div>
         </div>
 
-        <button className="w-full mt-4 bg-brunswickgreen text-white py-2 rounded-lg">
-          Book Here
-        </button>
+        {isOwner ? (
+          <button className="w-full mt-4 bg-red-500 text-white py-2 rounded-lg">
+            Delete this listing
+          </button>
+        ) : (
+          <button className="w-full mt-4 bg-brunswickgreen text-white py-2 rounded-lg">
+            Book Here
+          </button>
+        )}
       </div>
     </div>
   );

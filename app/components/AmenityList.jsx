@@ -30,7 +30,7 @@ const icons = {
 
 const AmenityList = ({ amenities }) => {
   return (
-    <ul className="flex flex-wrap gap-4 list-none">
+    <ul className="flex flex-wrap gap-4 list-none justify-center mx-auto">
       {amenities.map((amenity, index) => {
         const amenityKey = amenity.trim().toLowerCase(); // Standardize the amenity key
         return (

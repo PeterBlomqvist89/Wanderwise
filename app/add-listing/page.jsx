@@ -22,7 +22,7 @@ const AddListingPage = () => {
     rating: 0,
     description: "",
     cleaning_fee: 50,
-    wanderwise_fee: 0,
+    wanderwise_fee: 20,
     amenities: "",
     address: "",
     latitude: 0,
@@ -39,7 +39,6 @@ const AddListingPage = () => {
 
   useEffect(() => {
     if (!user) {
-      toast.error("You need to be logged in to add a listing.");
       router.push("/auth/sign-in");
     }
   }, [user, router]);
@@ -90,9 +89,10 @@ const AddListingPage = () => {
         },
         owner: [
           {
-            name: user?.displayName || "N/A",
+            name: user?.name || "N/A", // Använd name istället för displayName
             contact: user?.email || "N/A",
-            avatar: user?.photoURL || "/images/default-avatar.jpg", // Include avatar here
+            avatar: user?.photoURL || "/images/default-avatar.jpg",
+            phone: user?.phone || "N/A", // Lägg till telefonnummer här
           },
         ],
         property_type: selectedCategory

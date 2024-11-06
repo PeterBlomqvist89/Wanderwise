@@ -1,21 +1,21 @@
 import { useAuth } from "../components/AuthContextProvider";
 import { CircleUserRound } from "lucide-react";
 
-const Avatar = ({ avatarUrl }) => {
-  const { user } = useAuth(); // Fetch logged-in user data
-  const userAvatar = avatarUrl || user?.photoURL; // Use provided avatarUrl or fallback to user's photoURL
+const Avatar = ({ avatarUrl, className = "h-[63px] w-[63px]" }) => {
+  const { user } = useAuth();
+  const userAvatar = avatarUrl || user?.photoURL;
 
   return (
-    <div className="bg-brunswickgreen h-[63px] w-[63px] rounded-full flex items-center justify-center overflow-hidden border-2 border-brunswickgreen drop-shadow-lg">
+    <div
+      className={`bg-brunswickgreen rounded-full flex items-center justify-center overflow-hidden border-2 border-brunswickgreen drop-shadow-lg ${className}`}
+    >
       {userAvatar ? (
-        // Display the provided avatar or user's avatar
         <img
           src={userAvatar}
           alt="User Avatar"
-          className="h-full w-full object-cover"
+          className={`object-cover ${className}`}
         />
       ) : (
-        // Display a default icon if no avatar is set
         <CircleUserRound
           color="var(--timberwolf)"
           size={50}

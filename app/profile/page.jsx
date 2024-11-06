@@ -30,7 +30,6 @@ const Profile = () => {
   useEffect(() => {
     if (authLoaded) {
       if (!user) {
-        toast.error("You need to be logged in to add a listing.");
         router.push("/auth/sign-in");
       } else {
         const fetchUserData = async () => {
@@ -57,10 +56,7 @@ const Profile = () => {
   const handleLogout = async () => {
     await signOut(auth);
     toast.success("Logged out");
-
-    setTimeout(() => {
-      router.push("/");
-    }, 100);
+    router.push("/");
   };
 
   if (!authLoaded) {
