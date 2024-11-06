@@ -41,7 +41,8 @@ const Listings = () => {
       const docRef = doc(db, "listings", id);
       const listingDoc = await getDoc(docRef);
       if (listingDoc.exists()) {
-        setListing(listingDoc.data());
+        const data = listingDoc.data();
+        setListing(data);
       }
     };
     fetchListing();
@@ -203,7 +204,7 @@ const Listings = () => {
 
       {/* Booking Details */}
       {currentUserEmail && !isOwner && (
-        <div className="mx-auto p-8 border rounded-lg space-y-4 max-w-[550px]">
+        <div className="mx-auto p-8  rounded-lg space-y-4 max-w-[550px] border-2 border-brunswickgreen ">
           <div className="flex justify-between">
             <p className="text-lg">Price per night</p>
             <p className="text-lg font-semibold">${listing.price}</p>

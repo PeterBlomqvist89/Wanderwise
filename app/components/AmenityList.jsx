@@ -30,6 +30,8 @@ import {
   Bath,
   Caravan,
   TentTree,
+  Car,
+  Beef,
 } from "lucide-react";
 
 // Define an icon map to match amenities to icons
@@ -38,6 +40,8 @@ const icons = {
   "wi-fi": <Wifi />,
   "no wifi": <WifiOff />,
   tv: <Tv />,
+  BBQ: <Beef />,
+  parking: <Car />,
   "air conditioning": <AirVent />,
   bedroom: <Bed />,
   "double bed": <BedDouble />,

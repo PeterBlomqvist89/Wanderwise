@@ -2,7 +2,7 @@
 
 import { useState, useRef, useEffect } from "react";
 import { db, storage } from "../../firebaseConfig";
-import { addDoc, collection } from "firebase/firestore";
+import { doc, getDoc, addDoc, collection } from "firebase/firestore";
 import { ref, uploadBytes, getDownloadURL } from "firebase/storage";
 import { toast } from "react-hot-toast";
 import CategoryModal from "../components/CategoryModal";
@@ -78,6 +78,11 @@ const AddListingPage = () => {
         })
       );
 
+      // Hämta användarens fullständiga profil från Firestore
+      const userRef = doc(db, "users", user.uid);
+      const userDoc = await getDoc(userRef);
+      const userData = userDoc.exists() ? userDoc.data() : {};
+
       const listing = {
         ...listingData,
         images: uploadedImages,
@@ -89,10 +94,10 @@ const AddListingPage = () => {
         },
         owner: [
           {
-            name: user?.name || "N/A", // Använd name istället för displayName
+            name: userData.name || "N/A",
             contact: user?.email || "N/A",
-            avatar: user?.photoURL || "/images/default-avatar.jpg",
-            phone: user?.phone || "N/A", // Lägg till telefonnummer här
+            avatar: userData.avatar || "/images/default-avatar.jpg",
+            phone: userData.phone || "N/A", // Säkerställ att telefonnumret kommer från användarens profil
           },
         ],
         property_type: selectedCategory
