@@ -222,7 +222,7 @@ const Listings = () => {
             />
           </div>
 
-          <div className="flex  border-2 border-brunswickgreen p-2">
+          <div className="flex border-2 border-brunswickgreen p-2">
             <div>
               <label className="text-xl font-semibold">Check-in Date:</label>
               <input
@@ -232,7 +232,7 @@ const Listings = () => {
                 className="p-2 border rounded"
               />
             </div>
-            <div>
+            <div className="ml-auto">
               <label className="text-xl font-semibold">Check-out Date:</label>
               <input
                 type="date"
