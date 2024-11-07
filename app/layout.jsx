@@ -10,6 +10,7 @@ import { Toaster } from "react-hot-toast";
 import AuthContextProvider from "./components/AuthContextProvider";
 import { usePathname } from "next/navigation"; // Import usePathname
 import LogoSmall from "./components/navbar/LogoSmall";
+import { BookingProvider } from "./context/BookingContext";
 
 const livvic = Livvic({
   subsets: ["latin"],
@@ -31,13 +32,15 @@ export default function RootLayout({ children }) {
         className={`${livvic.variable} antialiased flex flex-col min-h-screen bg-timberwolf`}
       >
         <AuthContextProvider>
-          <Toaster />
-          <NavbarLarge />
-          <NavbarSmall />
-          {pathname === "/" ? <SearchbarSmall /> : <LogoSmall />}{" "}
-          {/* Conditionally render */}
-          <main className="flex-grow">{children}</main>
-          <Footer />
+          <BookingProvider>
+            <Toaster />
+            <NavbarLarge />
+            <NavbarSmall />
+            {pathname === "/" ? <SearchbarSmall /> : <LogoSmall />}{" "}
+            {/* Conditionally render */}
+            <main className="flex-grow">{children}</main>
+            <Footer />
+          </BookingProvider>
         </AuthContextProvider>
       </body>
     </html>

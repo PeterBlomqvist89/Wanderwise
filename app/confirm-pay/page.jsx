@@ -1,23 +1,30 @@
 "use client";
 
-import { useSearchParams } from "next/navigation";
+import { useBooking } from "@/app/context/BookingContext";
 import Image from "next/image";
+import { db } from "../../firebaseConfig";
+import { doc, updateDoc, getDoc } from "firebase/firestore";
+import { useRouter } from "next/navigation";
+import { toast } from "react-hot-toast";
+import AmenityList from "@/app/components/AmenityList";
 
 const ConfirmPay = () => {
-  const searchParams = useSearchParams();
+  const { bookingDetails } = useBooking();
+  const {
+    id,
+    checkIn,
+    checkOut,
+    guests,
+    price,
+    cleaningFee,
+    wanderwiseFee,
+    address,
+    description,
+    amenities,
+    images,
+  } = bookingDetails;
+  const router = useRouter();
 
-  // Hämta värden från URL-parametrarna
-  const id = searchParams.get("id");
-  const checkIn = searchParams.get("checkIn");
-  const checkOut = searchParams.get("checkOut");
-  const guests = searchParams.get("guests");
-  const price = parseFloat(searchParams.get("price") || "0");
-  const cleaningFee = parseFloat(searchParams.get("cleaningFee") || "0");
-  const wanderwiseFee = parseFloat(searchParams.get("wanderwiseFee") || "0");
-  const address = searchParams.get("address");
-  const description = searchParams.get("description");
-
-  // Beräkna antalet nätter och totalpriset
   const numberOfNights =
     checkIn && checkOut
       ? (new Date(checkOut) - new Date(checkIn)) / (1000 * 60 * 60 * 24)
@@ -25,18 +32,61 @@ const ConfirmPay = () => {
   const totalPrice = price * numberOfNights;
   const grandTotal = totalPrice + cleaningFee + wanderwiseFee;
 
+  // Funktion för att hantera bokning
+  const handlePay = async () => {
+    try {
+      const docRef = doc(db, "listings", id);
+      const docSnap = await getDoc(docRef);
+
+      if (docSnap.exists()) {
+        const existingData = docSnap.data();
+        const isDateAvailable = !existingData.bookings?.some((booking) => {
+          const existingStart = new Date(booking.checkIn);
+          const existingEnd = new Date(booking.checkOut);
+          const newStart = new Date(checkIn);
+          const newEnd = new Date(checkOut);
+
+          return (
+            (newStart >= existingStart && newStart < existingEnd) ||
+            (newEnd > existingStart && newEnd <= existingEnd) ||
+            (newStart <= existingStart && newEnd >= existingEnd)
+          );
+        });
+
+        if (!isDateAvailable) {
+          toast.error("Selected dates are already booked.");
+          return;
+        }
+
+        const updatedBookings = [
+          ...(existingData.bookings || []),
+          { checkIn, checkOut, guests },
+        ];
+
+        await updateDoc(docRef, { bookings: updatedBookings });
+        toast.success("Booking confirmed!");
+        router.push("/my-reservations");
+      } else {
+        toast.error("Listing not found.");
+      }
+    } catch (error) {
+      toast.error("Failed to complete booking. Please try again.");
+      console.error("Booking error:", error);
+      console.log("Booking Details:", bookingDetails);
+    }
+  };
+
   return (
     <div className="container mx-auto p-8 space-y-8 max-w-[1000px] mb-16">
       <h1 className="text-2xl font-semibold">{address}</h1>
 
-      {/* Bild och beskrivning */}
       <div className="flex flex-col lg:flex-row gap-8">
         <div className="lg:w-1/2 w-full">
           <Image
-            width={500}
-            height={500}
-            src="/images/default-image.jpg" // Justera till korrekt bildkälla
+            src={images[0]?.url || "/images/default-image.jpg"}
             alt="Selected Listing Image"
+            width={800}
+            height={500}
             className="w-full h-64 object-cover rounded-lg"
           />
         </div>
@@ -45,7 +95,7 @@ const ConfirmPay = () => {
         </div>
       </div>
 
-      {/* Prisinformation */}
+      {/* Price Information */}
       <div className="space-y-4 border-t-2 pt-4">
         <h2 className="text-xl font-semibold">Price Information</h2>
         <div className="flex justify-between">
@@ -59,7 +109,7 @@ const ConfirmPay = () => {
           <p>${cleaningFee}</p>
         </div>
         <div className="flex justify-between border-b-2 border-brunswickgreen pb-4">
-          <p>Wanderwise Service Fees</p>
+          <p>Wanderwise Fee</p>
           <p>${wanderwiseFee}</p>
         </div>
         <div className="flex justify-between font-bold text-xl">
@@ -68,16 +118,16 @@ const ConfirmPay = () => {
         </div>
       </div>
 
-      {/* Resedetaljer */}
+      {/* Your Journey */}
       <div className="border-2 border-brunswickgreen p-4 rounded-lg space-y-4">
         <h3 className="text-xl font-semibold">Your Journey</h3>
         <p>Check-in: {checkIn}</p>
         <p>Check-out: {checkOut}</p>
         <p>Guests: {guests}</p>
-        {/* Lägg till AmenityList här om du har data */}
+        <AmenityList amenities={amenities} />
       </div>
 
-      {/* Betalningsavsnitt */}
+      {/* Payment Section */}
       <div className="space-y-4 border-t-2 pt-4">
         <h2 className="text-xl font-semibold">Credit Card Details</h2>
         <input
@@ -104,7 +154,10 @@ const ConfirmPay = () => {
         </div>
       </div>
 
-      <button className="w-full bg-brunswickgreen text-white py-2 rounded-lg font-bold text-lg">
+      <button
+        onClick={handlePay}
+        className="w-full bg-brunswickgreen text-white py-2 rounded-lg font-bold text-lg"
+      >
         Pay Now
       </button>
     </div>

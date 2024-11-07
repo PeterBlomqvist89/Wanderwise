@@ -6,10 +6,11 @@ import { doc, getDoc, deleteDoc } from "firebase/firestore";
 import { db, auth } from "../../../firebaseConfig";
 import { onAuthStateChanged } from "firebase/auth";
 import Avatar from "@/app/components/Avatar";
-import { CircleArrowLeft, CircleArrowRight, CircleX } from "lucide-react";
+import { CircleArrowLeft, CircleArrowRight, CircleX, Star } from "lucide-react";
 import AmenityList from "@/app/components/AmenityList";
 import Image from "next/image";
 import { toast } from "react-hot-toast";
+import { useBooking } from "@/app/context/BookingContext";
 
 const Listings = () => {
   const { id } = useParams();
@@ -21,6 +22,7 @@ const Listings = () => {
   const [checkOut, setCheckOut] = useState("");
   const [isModalOpen, setModalOpen] = useState(false);
   const [currentImageIndex, setCurrentImageIndex] = useState(0);
+  const { setBookingDetails } = useBooking();
 
   // Hämta den inloggade användarens email
   useEffect(() => {
@@ -53,7 +55,7 @@ const Listings = () => {
   }
 
   // Kontrollera om den inloggade användaren är ägaren
-  const isOwner = currentUserEmail === listing.owner[0].contact;
+  const isOwner = currentUserEmail === listing.owner[0]?.contact;
 
   // Funktion för att hantera borttagning av listning
   const handleDelete = async () => {
@@ -63,8 +65,9 @@ const Listings = () => {
       toast.success("Listing deleted successfully!");
       router.push("/"); // Omdirigera till startsidan efter borttagning
     } catch (error) {
-      toast.error("Failed to delete listing. Please try again.");
-      console.error("Delete error:", error);
+      toast.error("Failed to complete booking. Please try again.");
+      console.error("Booking error:", error);
+      console.log("Full error object:", JSON.stringify(error, null, 2));
     }
   };
 
@@ -98,22 +101,22 @@ const Listings = () => {
     );
   };
 
+  // Funktion för att hantera bokning
   const handleBooking = () => {
-    const url = `/confirm-pay?id=${encodeURIComponent(
-      listing.id
-    )}&checkIn=${encodeURIComponent(checkIn)}&checkOut=${encodeURIComponent(
-      checkOut
-    )}&guests=${encodeURIComponent(guests)}&price=${encodeURIComponent(
-      listing.price
-    )}&cleaningFee=${encodeURIComponent(
-      listing.cleaning_fee
-    )}&wanderwiseFee=${encodeURIComponent(
-      listing.wanderwise_fee
-    )}&address=${encodeURIComponent(
-      listing.address
-    )}&description=${encodeURIComponent(listing.description)}`;
-
-    router.push(url);
+    setBookingDetails({
+      id: listing.id,
+      checkIn,
+      checkOut,
+      guests,
+      price: listing.price,
+      cleaningFee: listing.cleaning_fee,
+      wanderwiseFee: listing.wanderwise_fee,
+      address: listing.address,
+      description: listing.description,
+      amenities: listing.amenities,
+      images: listing.images,
+    });
+    router.push("/confirm-pay");
   };
 
   return (
@@ -145,10 +148,22 @@ const Listings = () => {
           </div>
 
           {/* Price per night under the two images */}
-          <div className="mt-4">
+          <div className="mt-4 flex justify-between items-center">
             <p className="text-xl font-semibold">
               Price per night: ${listing.price}
             </p>
+            <div className="flex">
+              <Star
+                className="pt-1 mr-1"
+                size={20}
+                fill="#588157"
+                color="var(--brunswickgreen)"
+              />
+              <p className="text-sm font-medium text-black pr-2">
+                {listing.rating} ({listing.reviews ? listing.reviews.length : 0}{" "}
+                reviews)
+              </p>
+            </div>
           </div>
         </div>
 
@@ -222,7 +237,7 @@ const Listings = () => {
 
       {/* Booking Details */}
       {currentUserEmail && !isOwner && (
-        <div className="mx-auto p-8  rounded-lg space-y-4 max-w-[550px] border-2 border-brunswickgreen shadow-md">
+        <div className="mx-auto p-8 rounded-lg space-y-4 max-w-[550px] border-2 border-brunswickgreen shadow-md">
           <div className="flex justify-between p-2">
             <p className="text-xl font-semibold">Price per night</p>
             <p className="text-xl font-semibold">${listing.price}</p>
@@ -246,8 +261,12 @@ const Listings = () => {
               <input
                 type="date"
                 value={checkIn}
-                onChange={(e) => setCheckIn(e.target.value)}
+                onChange={(e) => {
+                  setCheckIn(e.target.value);
+                  setCheckOut(""); // Nollställ slutdatum när startdatum ändras
+                }}
                 className="p-2 border rounded"
+                min={new Date().toISOString().split("T")[0]} // Sätt min till dagens datum
               />
             </div>
             <div className="ml-auto">
@@ -257,6 +276,8 @@ const Listings = () => {
                 value={checkOut}
                 onChange={(e) => setCheckOut(e.target.value)}
                 className="p-2 border rounded"
+                min={checkIn} // Sätt min till valt startdatum
+                disabled={!checkIn} // Inaktivera om inget startdatum är valt
               />
             </div>
           </div>
@@ -278,7 +299,7 @@ const Listings = () => {
               <p className="text-sm font-semibold">${wanderwiseFee}</p>
             </div>
 
-            <div className="flex justify-between font-bold text-2xl ">
+            <div className="flex justify-between font-bold text-2xl">
               <p>Total Price</p>
               <p>${grandTotal}</p>
             </div>
