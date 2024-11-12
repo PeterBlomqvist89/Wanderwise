@@ -110,7 +110,7 @@ const Profile = () => {
 
   return (
     <div className="flex flex-col items-center p-8 min-h-screen pb-32">
-      <h1 className="text-6xl font-bold mb-6 text-brunswickgreen">
+      <h1 className="text-6xl font-semibold font-livvic mb-6 text-brunswickgreen">
         Hello {displayName}
       </h1>
 
@@ -141,47 +141,47 @@ const Profile = () => {
         {isEditing ? (
           <>
             <div>
-              <label>Name:</label>
+              <label className="font-livvic font-bold">Name:</label>
               <input
                 type="text"
                 value={userData.name || ""}
                 onChange={(e) =>
                   setUserData({ ...userData, name: e.target.value })
                 }
-                className="w-full mt-1 p-2 rounded text-black"
+                className="w-full mt-1 p-2 rounded text-black font-livvic"
               />
             </div>
             <div>
-              <label>Bio:</label>
+              <label className="font-livvic font-bold">Bio:</label>
               <input
                 type="text"
                 value={userData.bio || ""}
                 onChange={(e) =>
                   setUserData({ ...userData, bio: e.target.value })
                 }
-                className="w-full mt-1 p-2 rounded text-black"
+                className="w-full mt-1 p-2 rounded text-black font-livvic"
               />
             </div>
             <div>
-              <label>Location:</label>
+              <label className="font-livvic font-bold">Location:</label>
               <input
                 type="text"
                 value={userData.location || ""}
                 onChange={(e) =>
                   setUserData({ ...userData, location: e.target.value })
                 }
-                className="w-full mt-1 p-2 rounded text-black"
+                className="w-full mt-1 p-2 rounded text-black font-livvic"
               />
             </div>
             <div>
-              <label>Phone:</label>
+              <label className="font-livvic font-bold">Phone:</label>
               <input
                 type="tel"
                 value={userData.phone || ""}
                 onChange={(e) =>
                   setUserData({ ...userData, phone: e.target.value })
                 }
-                className="w-full mt-1 p-2 rounded text-black"
+                className="w-full mt-1 p-2 rounded text-black font-livvic"
               />
             </div>
           </>

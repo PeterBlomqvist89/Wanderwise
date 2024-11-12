@@ -118,7 +118,7 @@ const MyReservations = () => {
               <p className="font-livvic">Guests: {reservation.guests}</p>
               <button
                 onClick={() => handleDeleteReservation(reservation.id, idx)}
-                className="mt-2 bg-red-500 text-white p-2 rounded"
+                className="mt-2 bg-red-500 text-white p-2 rounded font-livvic hover:bg-red-600"
               >
                 Cancel Reservation
               </button>
