@@ -1,15 +1,15 @@
 "use client";
 
-import React, { useEffect, useState } from "react";
 import {
   collection,
   query,
   where,
   getDocs,
-  deleteDoc,
   doc,
+  updateDoc,
+  getDoc,
 } from "firebase/firestore";
-import { db, auth } from "../../../firebaseConfig";
+import { db, auth } from "../../firebaseConfig";
 import { onAuthStateChanged } from "firebase/auth";
 import { toast } from "react-hot-toast";
 

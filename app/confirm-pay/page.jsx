@@ -72,7 +72,6 @@ const ConfirmPay = () => {
     } catch (error) {
       toast.error("Failed to complete booking. Please try again.");
       console.error("Booking error:", error);
-      console.log("Booking Details:", bookingDetails);
     }
   };
 
@@ -121,12 +120,27 @@ const ConfirmPay = () => {
       {/* Your Journey */}
       <div className="border-2 border-brunswickgreen p-4 rounded-lg space-y-4">
         <h3 className="text-xl font-semibold">Your Journey</h3>
-        <p>Check-in: {checkIn}</p>
-        <p>Check-out: {checkOut}</p>
+        <p>
+          Check-in:{" "}
+          {new Date(checkIn).toLocaleDateString("en-GB", {
+            weekday: "long",
+            year: "numeric",
+            month: "long",
+            day: "numeric",
+          })}
+        </p>
+        <p>
+          Check-out:{" "}
+          {new Date(checkOut).toLocaleDateString("en-GB", {
+            weekday: "long",
+            year: "numeric",
+            month: "long",
+            day: "numeric",
+          })}
+        </p>
         <p>Guests: {guests}</p>
         <AmenityList amenities={amenities} />
       </div>
-
       {/* Payment Section */}
       <div className="space-y-4 border-t-2 pt-4">
         <h2 className="text-xl font-semibold">Credit Card Details</h2>

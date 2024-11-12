@@ -11,6 +11,9 @@ import AmenityList from "@/app/components/AmenityList";
 import Image from "next/image";
 import { toast } from "react-hot-toast";
 import { useBooking } from "@/app/context/BookingContext";
+import { DateRange } from "react-date-range";
+import "react-date-range/dist/styles.css"; // Huvudstil
+import "react-date-range/dist/theme/default.css"; // Tema
 
 const Listings = () => {
   const { id } = useParams();
@@ -18,11 +21,17 @@ const Listings = () => {
   const [listing, setListing] = useState(null);
   const [currentUserEmail, setCurrentUserEmail] = useState(null);
   const [guests, setGuests] = useState(1);
-  const [checkIn, setCheckIn] = useState("");
-  const [checkOut, setCheckOut] = useState("");
+  const [dateRange, setDateRange] = useState([
+    {
+      startDate: new Date(),
+      endDate: new Date(),
+      key: "selection",
+    },
+  ]);
   const [isModalOpen, setModalOpen] = useState(false);
   const [currentImageIndex, setCurrentImageIndex] = useState(0);
   const { setBookingDetails } = useBooking();
+  const [disabledDates, setDisabledDates] = useState([]);
 
   // Hämta den inloggade användarens email
   useEffect(() => {
@@ -45,6 +54,17 @@ const Listings = () => {
       if (listingDoc.exists()) {
         const data = listingDoc.data();
         setListing(data);
+
+        // Extrahera redan bokade datum
+        const bookedDates = data.bookings?.reduce((dates, booking) => {
+          const start = new Date(booking.checkIn);
+          const end = new Date(booking.checkOut);
+          for (let d = new Date(start); d <= end; d.setDate(d.getDate() + 1)) {
+            dates.push(new Date(d));
+          }
+          return dates;
+        }, []);
+        setDisabledDates(bookedDates || []);
       }
     };
     fetchListing();
@@ -72,8 +92,8 @@ const Listings = () => {
   };
 
   const numberOfNights =
-    checkIn && checkOut
-      ? (new Date(checkOut) - new Date(checkIn)) / (1000 * 60 * 60 * 24)
+    dateRange[0].startDate && dateRange[0].endDate
+      ? (dateRange[0].endDate - dateRange[0].startDate) / (1000 * 60 * 60 * 24)
       : 0;
   const totalPrice = listing.price * numberOfNights;
   const cleaningFee = listing.cleaning_fee || 0;
@@ -104,9 +124,9 @@ const Listings = () => {
   // Funktion för att hantera bokning
   const handleBooking = () => {
     setBookingDetails({
-      id: listing.id,
-      checkIn,
-      checkOut,
+      id: id,
+      checkIn: dateRange[0].startDate.toISOString(),
+      checkOut: dateRange[0].endDate.toISOString(),
       guests,
       price: listing.price,
       cleaningFee: listing.cleaning_fee,
@@ -116,6 +136,7 @@ const Listings = () => {
       amenities: listing.amenities,
       images: listing.images,
     });
+    console.log("Listing ID:", id);
     router.push("/confirm-pay");
   };
 
@@ -256,30 +277,15 @@ const Listings = () => {
           </div>
 
           <div className="flex border-2 border-brunswickgreen p-2">
-            <div>
-              <label className="text-xl font-semibold">Check-in Date:</label>
-              <input
-                type="date"
-                value={checkIn}
-                onChange={(e) => {
-                  setCheckIn(e.target.value);
-                  setCheckOut(""); // Nollställ slutdatum när startdatum ändras
-                }}
-                className="p-2 border rounded"
-                min={new Date().toISOString().split("T")[0]} // Sätt min till dagens datum
-              />
-            </div>
-            <div className="ml-auto">
-              <label className="text-xl font-semibold">Check-out Date:</label>
-              <input
-                type="date"
-                value={checkOut}
-                onChange={(e) => setCheckOut(e.target.value)}
-                className="p-2 border rounded"
-                min={checkIn} // Sätt min till valt startdatum
-                disabled={!checkIn} // Inaktivera om inget startdatum är valt
-              />
-            </div>
+            <DateRange
+              editableDateInputs={true}
+              onChange={(item) => setDateRange([item.selection])}
+              moveRangeOnFirstSelection={false}
+              ranges={dateRange}
+              minDate={new Date()}
+              disabledDates={disabledDates} // Lägg till denna prop
+              rangeColors={["#344e41"]}
+            />
           </div>
 
           {/* Price Calculation */}
