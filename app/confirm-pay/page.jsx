@@ -2,11 +2,13 @@
 
 import { useBooking } from "@/app/context/BookingContext";
 import Image from "next/image";
-import { db } from "../../firebaseConfig";
+import { db, auth } from "../../firebaseConfig";
 import { doc, updateDoc, getDoc } from "firebase/firestore";
+import { onAuthStateChanged } from "firebase/auth";
 import { useRouter } from "next/navigation";
 import { toast } from "react-hot-toast";
 import AmenityList from "@/app/components/AmenityList";
+import React, { useEffect, useState } from "react";
 
 const ConfirmPay = () => {
   const { bookingDetails } = useBooking();
@@ -24,6 +26,18 @@ const ConfirmPay = () => {
     images,
   } = bookingDetails;
   const router = useRouter();
+  const [currentUser, setCurrentUser] = useState(null);
+
+  useEffect(() => {
+    const unsubscribe = onAuthStateChanged(auth, (user) => {
+      if (user) {
+        setCurrentUser(user.email);
+      } else {
+        setCurrentUser(null);
+      }
+    });
+    return () => unsubscribe();
+  }, []);
 
   const numberOfNights =
     checkIn && checkOut
@@ -34,6 +48,11 @@ const ConfirmPay = () => {
 
   // Funktion för att hantera bokning
   const handlePay = async () => {
+    if (!currentUser) {
+      toast.error("Please log in to complete the booking.");
+      return;
+    }
+
     try {
       const docRef = doc(db, "listings", id);
       const docSnap = await getDoc(docRef);
@@ -60,7 +79,12 @@ const ConfirmPay = () => {
 
         const updatedBookings = [
           ...(existingData.bookings || []),
-          { checkIn, checkOut, guests },
+          {
+            user: currentUser, // Lägg till användarens e-post här
+            checkIn,
+            checkOut,
+            guests,
+          },
         ];
 
         await updateDoc(docRef, { bookings: updatedBookings });
@@ -77,7 +101,7 @@ const ConfirmPay = () => {
 
   return (
     <div className="container mx-auto p-8 space-y-8 max-w-[1000px] mb-16">
-      <h1 className="text-2xl font-semibold">{address}</h1>
+      <h1 className="text-xl font-livvic">{address}</h1>
 
       <div className="flex flex-col lg:flex-row gap-8">
         <div className="lg:w-1/2 w-full">
@@ -90,7 +114,7 @@ const ConfirmPay = () => {
           />
         </div>
         <div className="lg:w-1/2 w-full">
-          <p>{description}</p>
+          <p className="font-livvic text-lg">{description}</p>
         </div>
       </div>
 
@@ -98,22 +122,22 @@ const ConfirmPay = () => {
       <div className="space-y-4 border-t-2 pt-4">
         <h2 className="text-xl font-semibold">Price Information</h2>
         <div className="flex justify-between">
-          <p>
+          <p className="font-livvic">
             ${price} x {numberOfNights} nights
           </p>
           <p>${totalPrice}</p>
         </div>
         <div className="flex justify-between">
-          <p>Cleaning Fee</p>
-          <p>${cleaningFee}</p>
+          <p className="font-livvic">Cleaning Fee</p>
+          <p className="font-livvic">${cleaningFee}</p>
         </div>
         <div className="flex justify-between border-b-2 border-brunswickgreen pb-4">
-          <p>Wanderwise Fee</p>
-          <p>${wanderwiseFee}</p>
+          <p className="font-livvic">Wanderwise Fee</p>
+          <p className="font-livvic">${wanderwiseFee}</p>
         </div>
         <div className="flex justify-between font-bold text-xl">
-          <p>Total Price</p>
-          <p>${grandTotal}</p>
+          <p className="font-livvic">Total Price</p>
+          <p className="font-livvic">${grandTotal}</p>
         </div>
       </div>
 
@@ -141,6 +165,7 @@ const ConfirmPay = () => {
         <p>Guests: {guests}</p>
         <AmenityList amenities={amenities} />
       </div>
+
       {/* Payment Section */}
       <div className="space-y-4 border-t-2 pt-4">
         <h2 className="text-xl font-semibold">Credit Card Details</h2>
@@ -170,7 +195,7 @@ const ConfirmPay = () => {
 
       <button
         onClick={handlePay}
-        className="w-full bg-brunswickgreen text-white py-2 rounded-lg font-bold text-lg"
+        className="w-full mt-4 bg-brunswickgreen text-white py-2 rounded-lg border-2 border-brunswickgreen hover:bg-timberwolf hover:text-brunswickgreen hover:border-2 hover:border-brunswickgreen"
       >
         Pay Now
       </button>

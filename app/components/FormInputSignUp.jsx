@@ -1,9 +1,8 @@
-"use client";
-
 import { useRouter } from "next/navigation";
 import React, { useState } from "react";
-import { auth } from "../../firebaseConfig";
+import { auth, db } from "../../firebaseConfig"; // Se till att db är importerat från firebaseConfig
 import { createUserWithEmailAndPassword } from "firebase/auth";
+import { doc, setDoc } from "firebase/firestore";
 import toast from "react-hot-toast";
 
 const FormInput = () => {
@@ -15,7 +14,20 @@ const FormInput = () => {
   const handleRegister = async (e) => {
     e.preventDefault();
     try {
-      await createUserWithEmailAndPassword(auth, email, password);
+      const userCredential = await createUserWithEmailAndPassword(
+        auth,
+        email,
+        password
+      );
+      const user = userCredential.user;
+
+      // Spara användaren i Firestore
+      await setDoc(doc(db, "users", user.uid), {
+        uid: user.uid,
+        name: name,
+        email: email,
+      });
+
       toast.success("Successfully registered!");
       router.push("/");
     } catch (error) {

@@ -1,7 +1,6 @@
 "use client";
 
 import FormInputSignIn from "@/app/components/FormInputSignIn";
-import LogoSmall from "@/app/components/navbar/LogoSmall";
 import Image from "next/image";
 import { useRouter } from "next/navigation";
 import React from "react";
@@ -17,7 +16,7 @@ const SignIn = () => {
         <div className="flex flex-1">
           <div className="flex-[1.5] md:block hidden">
             <Image
-              src="/images/login.jpg"
+              src="/images/login2.jpg"
               alt="Background"
               height={600}
               width={714}

@@ -76,6 +76,13 @@ const UserMenu = () => {
                 }}
                 label="Add your own wandercabin"
               />
+              <MenuItem
+                onClick={() => {
+                  router.push("/my-reservations");
+                  setIsOpen(false);
+                }}
+                label="My reservations"
+              />
               <MenuItem onClick={handleLogout} label="Log out" />
             </>
           ) : (

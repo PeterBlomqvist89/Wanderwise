@@ -142,12 +142,12 @@ const Listings = () => {
 
   return (
     <div className="container mx-auto p-8 space-y-8 max-w-[1000px] mb-16">
-      <h1 className="text-xl font-semibold -mb-6">{listing.address}</h1>
+      <h1 className="text-xl -mb-6 font-livvic">{listing.address}</h1>
 
       {/* Images and Description side by side */}
       <div className="flex flex-col lg:flex-row gap-8">
         {/* Images Section */}
-        <div className="lg:w-2/3 w-full space-y-3">
+        <div className="lg:w-1/2 w-full space-y-3">
           <div className="w-full">
             <img
               src={listing.images[0]?.url}
@@ -170,8 +170,8 @@ const Listings = () => {
 
           {/* Price per night under the two images */}
           <div className="mt-4 flex justify-between items-center">
-            <p className="text-xl font-semibold">
-              Price per night: ${listing.price}
+            <p className="text-xl font-medium font-livvic">
+              ${listing.price} Per night
             </p>
             <div className="flex">
               <Star
@@ -180,7 +180,7 @@ const Listings = () => {
                 fill="#588157"
                 color="var(--brunswickgreen)"
               />
-              <p className="text-sm font-medium text-black pr-2">
+              <p className="text-sm font-medium font-livvic text-black pr-2">
                 {listing.rating} ({listing.reviews ? listing.reviews.length : 0}{" "}
                 reviews)
               </p>
@@ -189,12 +189,12 @@ const Listings = () => {
         </div>
 
         {/* Description Section */}
-        <div className="lg:w-1/3 w-full space-y-4">
-          <p className="border-b-2 border-brunswickgreen pb-8">
+        <div className="lg:w-1/2 w-full space-y-4">
+          <p className="border-b-2 border-brunswickgreen pb-8 font-livvic text-lg">
             {listing.description}
           </p>
           <AmenityList amenities={listing.amenities} />
-          <div className="border-2 text-sm font-light border-brunswickgreen p-4 rounded-xl shadow-md">
+          <div className="border-2 text-sm  border-brunswickgreen font-livvic p-8 rounded-xl shadow-md">
             <p>{listing.cancellation_policy}</p>
           </div>
         </div>
@@ -250,9 +250,13 @@ const Listings = () => {
             avatarUrl={listing.owner[0]?.avatar || "/images/default-avatar.jpg"}
             className="mb-4 h-[125px] w-[125px]"
           />
-          <h3 className="text-lg font-semibold">{listing.owner[0]?.name}</h3>
-          <p>Email: {listing.owner[0]?.contact}</p>
-          <p>Phone: {listing.owner[0]?.phone || "Not available"}</p>
+          <h3 className="text-lg font-semibold font-livvic">
+            {listing.owner[0]?.name}
+          </h3>
+          <p className="font-livvic">Email: {listing.owner[0]?.contact}</p>
+          <p className="font-livvic">
+            Phone: {listing.owner[0]?.phone || "Not available"}
+          </p>
         </div>
       </div>
 
@@ -260,12 +264,12 @@ const Listings = () => {
       {currentUserEmail && !isOwner && (
         <div className="mx-auto p-8 rounded-lg space-y-4 max-w-[550px] border-2 border-brunswickgreen shadow-md">
           <div className="flex justify-between p-2">
-            <p className="text-xl font-semibold">Price per night</p>
-            <p className="text-xl font-semibold">${listing.price}</p>
+            <p className="text-xl  font-livvic">Price per night</p>
+            <p className="text-xl  font-livvic">${listing.price}</p>
           </div>
 
           <div className="flex justify-between items-center space-y-2 border-2 border-brunswickgreen p-2">
-            <label className="text-xl font-semibold">Guests:</label>
+            <label className="text-xl  font-livvic">Guests:</label>
             <input
               type="number"
               min="1"
@@ -291,21 +295,21 @@ const Listings = () => {
           {/* Price Calculation */}
           <div className="space-y-2 p-2">
             <div className="flex justify-between">
-              <p className="text-sm font-semibold">
+              <p className="text-sm font-livvic">
                 ${listing.price} x {numberOfNights} nights
               </p>
-              <p className="text-sm font-semibold">${totalPrice}</p>
+              <p className="text-sm font-livvic">${totalPrice}</p>
             </div>
             <div className="flex justify-between">
-              <p className="text-sm font-semibold">Cleaning Fee</p>
-              <p className="text-sm font-semibold">${cleaningFee}</p>
+              <p className="text-sm font-livvic">Cleaning Fee</p>
+              <p className="text-sm font-livvic">${cleaningFee}</p>
             </div>
             <div className="flex justify-between border-b-2 border-brunswickgreen pb-4">
-              <p className="text-sm font-semibold">Wanderwise Fee</p>
-              <p className="text-sm font-semibold">${wanderwiseFee}</p>
+              <p className="text-sm font-livvic">Wanderwise Fee</p>
+              <p className="text-sm font-livvic">${wanderwiseFee}</p>
             </div>
 
-            <div className="flex justify-between font-bold text-2xl">
+            <div className="flex justify-between font-bold text-xl font-livvic">
               <p>Total Price</p>
               <p>${grandTotal}</p>
             </div>
