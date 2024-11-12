@@ -30,16 +30,19 @@ const FormInputSignIn = () => {
       <h2 className="text-2xl font-bold mb-4">Sign in</h2>
 
       <form onSubmit={handleSignIn} className="space-y-4 w-full max-w-[476px]">
-        {error && <p className="text-red-500">{error}</p>}
+        {error && <p className="text-red-500 font-livvic">{error}</p>}
 
         <div>
-          <label className="block text-xl font-medium mb-2" htmlFor="email">
+          <label
+            className="block text-xl font-medium mb-2 font-livvic"
+            htmlFor="email"
+          >
             Email
           </label>
           <input
             id="email"
             type="email"
-            className="w-full p-2 rounded-2xl bg-timberwolf text-gray-900 h-9"
+            className="w-full p-2 rounded-2xl bg-timberwolf text-gray-900 h-9 font-livvic"
             placeholder="Enter your email"
             value={email}
             onChange={(e) => setEmail(e.target.value)}
@@ -47,13 +50,16 @@ const FormInputSignIn = () => {
         </div>
 
         <div>
-          <label className="block text-xl font-medium mb-2" htmlFor="password">
+          <label
+            className="block text-xl font-medium mb-2 font-livvic"
+            htmlFor="password"
+          >
             Password
           </label>
           <input
             id="password"
             type="password"
-            className="w-full p-2 rounded-2xl bg-timberwolf text-gray-900 h-9"
+            className="w-full p-2 rounded-2xl bg-timberwolf text-gray-900 h-9 font-livvic"
             placeholder="Enter your password"
             value={password}
             onChange={(e) => setPassword(e.target.value)}
@@ -63,18 +69,18 @@ const FormInputSignIn = () => {
         <div className="pt-6">
           <button
             type="submit"
-            className="w-full text-xl text-timberwolf font-medium py-2 bg-ferngreen border-2 border-timberwolf rounded-full hover:bg-timberwolf hover:text-ferngreen hover:border-ferngreen"
+            className="w-full text-xl text-timberwolf font-medium py-2 bg-ferngreen font-livvic border-2 border-timberwolf rounded-full hover:bg-timberwolf hover:text-ferngreen hover:border-ferngreen"
           >
             Sign In
           </button>
         </div>
       </form>
 
-      <p className=" text-center text-lg mt-6">
+      <p className=" text-center text-lg mt-6 font-livvic">
         Not a member? Create an account{" "}
         <span
           onClick={() => router.push("/auth/sign-up")}
-          className="underline cursor-pointer text-white"
+          className="underline cursor-pointer text-white font-livvic"
         >
           here
         </span>
