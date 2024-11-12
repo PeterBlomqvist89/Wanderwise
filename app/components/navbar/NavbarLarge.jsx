@@ -4,8 +4,8 @@ import React from "react";
 import Logo from "./Logo";
 import LogoFont from "./LogoFont";
 import UserMenu from "./UserMenu";
-import Searchbar from "./Searchbar";
 import { useSearch } from "@/app/context/SearchContext";
+import Searchbar from "./Searchbar";
 
 const NavbarLarge = () => {
   const { setSearchTerm } = useSearch();

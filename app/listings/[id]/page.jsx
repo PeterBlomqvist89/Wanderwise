@@ -142,10 +142,9 @@ const Listings = () => {
 
   return (
     <div className="container mx-auto p-8 space-y-8 max-w-[1000px] mb-16">
-      <h1 className="text-xl -mb-6 font-livvic">{listing.address}</h1>
-
+      <h1 className="text-xl -mb-6  font-livvic">{listing.address}</h1>
       {/* Images and Description side by side */}
-      <div className="flex flex-col lg:flex-row gap-8">
+      <div className="flex flex-col   lg:flex-row gap-8">
         {/* Images Section */}
         <div className="lg:w-1/2 w-full space-y-3">
           <div className="w-full">
@@ -190,6 +189,7 @@ const Listings = () => {
 
         {/* Description Section */}
         <div className="lg:w-1/2 w-full space-y-4">
+          <p className="text-xl font-medium font-livvic">{listing.title}</p>
           <p className="border-b-2 border-brunswickgreen pb-8 font-livvic text-lg">
             {listing.description}
           </p>
