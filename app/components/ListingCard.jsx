@@ -29,7 +29,9 @@ export default function ListingCard({ listing, variant, onClick }) {
             </p>
           </div>
         </div>
-        <p className="text-lg font-livvic text-grey">{listing.address}</p>
+        <p className="text-lg font-livvic text-grey truncate">
+          {listing.address}
+        </p>
       </div>
     </div>
   );

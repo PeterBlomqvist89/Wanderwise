@@ -193,6 +193,9 @@ const Listings = () => {
           <p className="border-b-2 border-brunswickgreen pb-8 font-livvic text-lg">
             {listing.description}
           </p>
+          <p className="font-livvic flex justify-center">
+            Guests: {listing.max_guests}
+          </p>
           <AmenityList amenities={listing.amenities} />
           <div className="border-2 text-sm  border-brunswickgreen font-livvic p-8 rounded-xl shadow-md">
             <p>{listing.cancellation_policy}</p>

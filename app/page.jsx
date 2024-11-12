@@ -4,9 +4,12 @@ import { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
 import ListingCard from "./components/ListingCard";
 import Head from "next/head"; // Import Head
+import { useSearch } from "./context/SearchContext";
 
 export default function MainPage() {
+  const { searchTerm } = useSearch();
   const [listings, setListings] = useState([]);
+  const [filteredListings, setFilteredListings] = useState([]);
   const router = useRouter();
 
   useEffect(() => {
@@ -18,6 +21,7 @@ export default function MainPage() {
         }
         const data = await response.json();
         setListings(data);
+        setFilteredListings(data); // Initialt sätts filtrerade listningar till alla listningar
       } catch (error) {
         console.error("Error fetching listings:", error);
         if (retryCount > 0) {
@@ -27,6 +31,17 @@ export default function MainPage() {
     }
     fetchListings();
   }, []);
+
+  useEffect(() => {
+    if (searchTerm === "") {
+      setFilteredListings(listings);
+    } else {
+      const filtered = listings.filter((listing) =>
+        listing.address?.toLowerCase().includes(searchTerm.toLowerCase())
+      );
+      setFilteredListings(filtered);
+    }
+  }, [searchTerm, listings]);
 
   const handleCardClick = (id) => {
     router.push(`/listings/${id}`);
@@ -40,7 +55,7 @@ export default function MainPage() {
         <link rel="icon" href="/favicon.ico" sizes="any" />
       </Head>
       <div className="p-8 max-w-[1000px] mx-auto flex flex-col grid-cols-1 md:grid-cols-3 gap-4 md:grid">
-        {listings.map((listing, index) => (
+        {filteredListings.map((listing, index) => (
           <ListingCard
             key={listing.id}
             listing={listing}

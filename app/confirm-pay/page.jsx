@@ -120,7 +120,7 @@ const ConfirmPay = () => {
 
       {/* Price Information */}
       <div className="space-y-4 border-t-2 pt-4">
-        <h2 className="text-xl font-semibold">Price Information</h2>
+        <h2 className="text-xl font-semibold font-livvic">Price Information</h2>
         <div className="flex justify-between">
           <p className="font-livvic">
             ${price} x {numberOfNights} nights
@@ -143,8 +143,8 @@ const ConfirmPay = () => {
 
       {/* Your Journey */}
       <div className="border-2 border-brunswickgreen p-4 rounded-lg space-y-4">
-        <h3 className="text-xl font-semibold">Your Journey</h3>
-        <p>
+        <h3 className="text-xl font-semibold font-livvic">Your Journey</h3>
+        <p className="font-livvic">
           Check-in:{" "}
           {new Date(checkIn).toLocaleDateString("en-GB", {
             weekday: "long",
@@ -153,7 +153,7 @@ const ConfirmPay = () => {
             day: "numeric",
           })}
         </p>
-        <p>
+        <p className="font-livvic">
           Check-out:{" "}
           {new Date(checkOut).toLocaleDateString("en-GB", {
             weekday: "long",
@@ -162,33 +162,35 @@ const ConfirmPay = () => {
             day: "numeric",
           })}
         </p>
-        <p>Guests: {guests}</p>
+        <p className="font-livvic">Guests: {guests}</p>
         <AmenityList amenities={amenities} />
       </div>
 
       {/* Payment Section */}
       <div className="space-y-4 border-t-2 pt-4">
-        <h2 className="text-xl font-semibold">Credit Card Details</h2>
+        <h2 className="text-xl font-semibold font-livvic">
+          Credit Card Details
+        </h2>
         <input
           type="text"
           placeholder="Card Number"
-          className="p-2 border rounded w-full"
+          className="p-2 border rounded w-full font-livvic"
         />
         <input
           type="text"
           placeholder="Name on Card"
-          className="p-2 border rounded w-full"
+          className="p-2 border rounded w-full font-livvic"
         />
         <div className="flex space-x-4">
           <input
             type="text"
             placeholder="Expiry Date (MM/YY)"
-            className="p-2 border rounded w-1/2"
+            className="p-2 border rounded w-1/2 font-livvic"
           />
           <input
             type="text"
             placeholder="CVV"
-            className="p-2 border rounded w-1/2"
+            className="p-2 border rounded w-1/2 font-livvic"
           />
         </div>
       </div>

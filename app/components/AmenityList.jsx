@@ -90,7 +90,7 @@ const AmenityList = ({ amenities }) => {
                 <span className="text-brunswickgreen">{icons[amenityKey]}</span>
               ) : null}
             </div>
-            <span className="text-center text-sm text-brunswickgreen">
+            <span className="text-center text-sm text-brunswickgreen font-livvic">
               {amenity}
             </span>
           </li>

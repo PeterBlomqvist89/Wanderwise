@@ -11,6 +11,7 @@ import AuthContextProvider from "./components/AuthContextProvider";
 import { usePathname } from "next/navigation"; // Import usePathname
 import LogoSmall from "./components/navbar/LogoSmall";
 import { BookingProvider } from "./context/BookingContext";
+import { SearchProvider } from "./context/SearchContext";
 
 const livvic = Livvic({
   subsets: ["latin"],
@@ -32,15 +33,17 @@ export default function RootLayout({ children }) {
         className={`${livvic.variable} antialiased flex flex-col min-h-screen bg-timberwolf`}
       >
         <AuthContextProvider>
-          <BookingProvider>
-            <Toaster />
-            <NavbarLarge />
-            <NavbarSmall />
-            {pathname === "/" ? <SearchbarSmall /> : <LogoSmall />}{" "}
-            {/* Conditionally render */}
-            <main className="flex-grow">{children}</main>
-            <Footer />
-          </BookingProvider>
+          <SearchProvider>
+            <BookingProvider>
+              <Toaster />
+              <NavbarLarge />
+              <NavbarSmall />
+              {pathname === "/" ? <SearchbarSmall /> : <LogoSmall />}{" "}
+              {/* Conditionally render */}
+              <main className="flex-grow">{children}</main>
+              <Footer />
+            </BookingProvider>
+          </SearchProvider>
         </AuthContextProvider>
       </body>
     </html>
