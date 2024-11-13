@@ -10,6 +10,7 @@ import { CircleX } from "lucide-react";
 export default function MainPage() {
   const {
     searchTerm,
+    setSearchTerm, // Lägg till setSearchTerm här
     destination,
     category,
     guests,
@@ -17,7 +18,6 @@ export default function MainPage() {
     dateRange,
     isSearchActive,
     setIsSearchActive,
-    setSearchTerm,
     setSearchParams,
   } = useSearch();
 
@@ -37,52 +37,49 @@ export default function MainPage() {
 
   useEffect(() => {
     const filterListings = () => {
-      if (!isSearchActive) {
-        setFilteredListings(listings);
-        return;
-      }
-
       let filtered = listings;
 
-      if (searchTerm) {
-        filtered = filtered.filter((listing) =>
-          listing.address?.toLowerCase().includes(searchTerm.toLowerCase())
-        );
-      }
+      if (isSearchActive || searchTerm) {
+        if (searchTerm) {
+          filtered = filtered.filter((listing) =>
+            listing.address?.toLowerCase().includes(searchTerm.toLowerCase())
+          );
+        }
 
-      if (destination) {
-        filtered = filtered.filter((listing) =>
-          listing.address?.toLowerCase().includes(destination.toLowerCase())
-        );
-      }
+        if (destination) {
+          filtered = filtered.filter((listing) =>
+            listing.address?.toLowerCase().includes(destination.toLowerCase())
+          );
+        }
 
-      if (category) {
-        filtered = filtered.filter(
-          (listing) => listing.category === category.label
-        );
-      }
+        if (category) {
+          filtered = filtered.filter(
+            (listing) => listing.category === category.label
+          );
+        }
 
-      if (guests) {
-        filtered = filtered.filter((listing) => listing.max_guests >= guests);
-      }
+        if (guests) {
+          filtered = filtered.filter((listing) => listing.max_guests >= guests);
+        }
 
-      if (maxPrice) {
-        filtered = filtered.filter(
-          (listing) => listing.price <= Number(maxPrice)
-        );
-      }
+        if (maxPrice) {
+          filtered = filtered.filter(
+            (listing) => listing.price <= Number(maxPrice)
+          );
+        }
 
-      if (dateRange && dateRange[0]) {
-        const { startDate, endDate } = dateRange[0];
-        filtered = filtered.filter(
-          (listing) =>
-            !listing.bookings ||
-            listing.bookings.every((booking) => {
-              const bookingStart = new Date(booking.checkIn);
-              const bookingEnd = new Date(booking.checkOut);
-              return bookingEnd < startDate || bookingStart > endDate;
-            })
-        );
+        if (dateRange && dateRange[0]) {
+          const { startDate, endDate } = dateRange[0];
+          filtered = filtered.filter(
+            (listing) =>
+              !listing.bookings ||
+              listing.bookings.every((booking) => {
+                const bookingStart = new Date(booking.checkIn);
+                const bookingEnd = new Date(booking.checkOut);
+                return bookingEnd < startDate || bookingStart > endDate;
+              })
+          );
+        }
       }
 
       setFilteredListings(filtered);
@@ -102,7 +99,7 @@ export default function MainPage() {
 
   const handleClearSearch = () => {
     setIsSearchActive(false);
-    setSearchTerm("");
+    setSearchTerm(""); // Återställ söktermen till en tom sträng
     setSearchParams({
       destination: "",
       category: null,
@@ -116,7 +113,7 @@ export default function MainPage() {
         },
       ],
     });
-    setFilteredListings(listings);
+    setFilteredListings(listings); // Återställ till alla listningar
   };
 
   const handleCardClick = (id) => {
@@ -132,7 +129,6 @@ export default function MainPage() {
       </Head>
 
       <div className="p-8 max-w-[1000px] mx-auto">
-        {/* Clear Search Button */}
         {isSearchActive && (
           <div className="flex justify-center mb-4">
             <button
@@ -145,7 +141,6 @@ export default function MainPage() {
           </div>
         )}
 
-        {/* Listings Grid */}
         <div className="flex flex-col grid-cols-1 md:grid-cols-3 gap-4 md:grid">
           {filteredListings.map((listing, index) => (
             <ListingCard
