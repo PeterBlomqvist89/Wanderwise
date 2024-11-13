@@ -1,14 +1,17 @@
 import { Search, Settings2 } from "lucide-react";
 import React, { useState } from "react";
 import SearchModal from "../SearchModal";
+import { useSearch } from "@/app/context/SearchContext";
 
-const Searchbar = ({ onSearch }) => {
-  const [searchTerm, setSearchTerm] = useState("");
+const Searchbar = () => {
+  const { setSearchTerm } = useSearch();
+  const [searchTerm, setLocalSearchTerm] = useState("");
   const [isModalOpen, setModalOpen] = useState(false);
 
   const handleSearch = (event) => {
-    setSearchTerm(event.target.value);
-    onSearch(event.target.value); // Skicka sökordet till MainPage
+    const value = event.target.value;
+    setLocalSearchTerm(value);
+    setSearchTerm(value); // Uppdatera global sökterm
   };
 
   return (

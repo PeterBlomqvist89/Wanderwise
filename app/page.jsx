@@ -3,45 +3,121 @@
 import { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
 import ListingCard from "./components/ListingCard";
-import Head from "next/head"; // Import Head
+import Head from "next/head";
 import { useSearch } from "./context/SearchContext";
+import { CircleX } from "lucide-react";
 
 export default function MainPage() {
-  const { searchTerm } = useSearch();
+  const {
+    searchTerm,
+    destination,
+    category,
+    guests,
+    maxPrice,
+    dateRange,
+    isSearchActive,
+    setIsSearchActive,
+    setSearchTerm,
+    setSearchParams,
+  } = useSearch();
+
   const [listings, setListings] = useState([]);
   const [filteredListings, setFilteredListings] = useState([]);
   const router = useRouter();
 
   useEffect(() => {
-    async function fetchListings(retryCount = 3) {
-      try {
-        const response = await fetch("/api/listings");
-        if (!response.ok) {
-          throw new Error("Network response was not ok");
-        }
-        const data = await response.json();
-        setListings(data);
-        setFilteredListings(data); // Initialt sätts filtrerade listningar till alla listningar
-      } catch (error) {
-        console.error("Error fetching listings:", error);
-        if (retryCount > 0) {
-          setTimeout(() => fetchListings(retryCount - 1), 100);
-        }
-      }
+    async function fetchListings() {
+      const response = await fetch("/api/listings");
+      const data = await response.json();
+      setListings(data);
+      setFilteredListings(data);
     }
     fetchListings();
   }, []);
 
   useEffect(() => {
-    if (searchTerm === "") {
-      setFilteredListings(listings);
-    } else {
-      const filtered = listings.filter((listing) =>
-        listing.address?.toLowerCase().includes(searchTerm.toLowerCase())
-      );
+    const filterListings = () => {
+      if (!isSearchActive) {
+        setFilteredListings(listings);
+        return;
+      }
+
+      let filtered = listings;
+
+      if (searchTerm) {
+        filtered = filtered.filter((listing) =>
+          listing.address?.toLowerCase().includes(searchTerm.toLowerCase())
+        );
+      }
+
+      if (destination) {
+        filtered = filtered.filter((listing) =>
+          listing.address?.toLowerCase().includes(destination.toLowerCase())
+        );
+      }
+
+      if (category) {
+        filtered = filtered.filter(
+          (listing) => listing.category === category.label
+        );
+      }
+
+      if (guests) {
+        filtered = filtered.filter((listing) => listing.max_guests >= guests);
+      }
+
+      if (maxPrice) {
+        filtered = filtered.filter(
+          (listing) => listing.price <= Number(maxPrice)
+        );
+      }
+
+      if (dateRange && dateRange[0]) {
+        const { startDate, endDate } = dateRange[0];
+        filtered = filtered.filter(
+          (listing) =>
+            !listing.bookings ||
+            listing.bookings.every((booking) => {
+              const bookingStart = new Date(booking.checkIn);
+              const bookingEnd = new Date(booking.checkOut);
+              return bookingEnd < startDate || bookingStart > endDate;
+            })
+        );
+      }
+
       setFilteredListings(filtered);
-    }
-  }, [searchTerm, listings]);
+    };
+
+    filterListings();
+  }, [
+    searchTerm,
+    destination,
+    category,
+    guests,
+    maxPrice,
+    dateRange,
+    isSearchActive,
+    listings,
+  ]);
+
+  const handleClearSearch = () => {
+    setIsSearchActive(false);
+    setSearchTerm("");
+    setSearchParams({
+      destination: "",
+      category: null,
+      guests: 1,
+      maxPrice: "",
+      dateRange: [
+        {
+          startDate: new Date(),
+          endDate: new Date(),
+          key: "selection",
+        },
+      ],
+    });
+    setFilteredListings(listings);
+  };
 
   const handleCardClick = (id) => {
     router.push(`/listings/${id}`);
@@ -54,15 +130,32 @@ export default function MainPage() {
         <meta name="description" content="Find your home away from home" />
         <link rel="icon" href="/favicon.ico" sizes="any" />
       </Head>
-      <div className="p-8 max-w-[1000px] mx-auto flex flex-col grid-cols-1 md:grid-cols-3 gap-4 md:grid">
-        {filteredListings.map((listing, index) => (
-          <ListingCard
-            key={listing.id}
-            listing={listing}
-            variant={index % 5 === 3 ? "wide" : "standard"}
-            onClick={() => handleCardClick(listing.id)}
-          />
-        ))}
+
+      <div className="p-8 max-w-[1000px] mx-auto">
+        {/* Clear Search Button */}
+        {isSearchActive && (
+          <div className="flex justify-center mb-4">
+            <button
+              onClick={handleClearSearch}
+              className="flex items-center text-brunswickgreen"
+            >
+              <CircleX size={20} className="mr-1" />
+              Clear Search
+            </button>
+          </div>
+        )}
+
+        {/* Listings Grid */}
+        <div className="flex flex-col grid-cols-1 md:grid-cols-3 gap-4 md:grid">
+          {filteredListings.map((listing, index) => (
+            <ListingCard
+              key={listing.id}
+              listing={listing}
+              variant={index % 5 === 3 ? "wide" : "standard"}
+              onClick={() => handleCardClick(listing.id)}
+            />
+          ))}
+        </div>
       </div>
     </>
   );
