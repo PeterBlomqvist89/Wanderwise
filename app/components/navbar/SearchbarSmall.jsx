@@ -9,7 +9,7 @@ const SearchbarSmall = () => {
   const handleSearch = (event) => {
     const term = event.target.value;
     setLocalSearchTerm(term);
-    setSearchTerm(term); // Update global search term
+    setSearchTerm(term);
   };
 
   return (

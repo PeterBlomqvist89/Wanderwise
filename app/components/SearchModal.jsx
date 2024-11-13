@@ -25,13 +25,27 @@ const SearchModal = ({ isOpen, onClose }) => {
   const handleSearch = () => {
     setSearchParams({
       destination,
-      category: category ? category.label : null, // Skicka endast label
+      category: category ? category.label : null,
       guests,
       maxPrice,
       dateRange,
     });
     setIsSearchActive(true);
     onClose();
+  };
+
+  const handleReset = () => {
+    setDestination("");
+    setCategory(null);
+    setGuests(1);
+    setMaxPrice("");
+    setDateRange([
+      {
+        startDate: new Date(),
+        endDate: new Date(),
+        key: "selection",
+      },
+    ]);
   };
 
   if (!isOpen) return null;
@@ -49,7 +63,7 @@ const SearchModal = ({ isOpen, onClose }) => {
         <div className="flex flex-col gap-4">
           {/* Destination */}
           <div>
-            <label>Destination?</label>
+            <label className="font-livvic">Destination?</label>
             <input
               type="text"
               placeholder="Choose destination..."
@@ -61,7 +75,7 @@ const SearchModal = ({ isOpen, onClose }) => {
 
           {/* Category */}
           <div>
-            <label>Category</label>
+            <label className="font-livvic">Category</label>
             <div
               onClick={() => setCategoryModalOpen(true)}
               className="p-2 border rounded cursor-pointer"
@@ -72,7 +86,7 @@ const SearchModal = ({ isOpen, onClose }) => {
 
           {/* Guests */}
           <div>
-            <label>Guests?</label>
+            <label className="font-livvic">Guests?</label>
             <input
               type="number"
               min="1"
@@ -84,7 +98,7 @@ const SearchModal = ({ isOpen, onClose }) => {
 
           {/* Price */}
           <div>
-            <label>Price</label>
+            <label className="font-livvic">Price</label>
             <input
               type="text"
               placeholder="Max price..."
@@ -96,19 +110,15 @@ const SearchModal = ({ isOpen, onClose }) => {
 
           {/* Kalender med start- och slutdatum */}
           <div>
-            <label>Select Dates</label>
-            <div className="">
-              {" "}
-              {/* Begränsar bredden på kalendern */}
-              <DateRange
-                editableDateInputs={true}
-                onChange={(item) => setDateRange([item.selection])}
-                moveRangeOnFirstSelection={false}
-                ranges={dateRange}
-                minDate={new Date()}
-                rangeColors={["#344e41"]}
-              />
-            </div>
+            <label className="font-livvic">Select Dates</label>
+            <DateRange
+              editableDateInputs={true}
+              onChange={(item) => setDateRange([item.selection])}
+              moveRangeOnFirstSelection={false}
+              ranges={dateRange}
+              minDate={new Date()}
+              rangeColors={["#344e41"]}
+            />
           </div>
         </div>
 
@@ -123,12 +133,21 @@ const SearchModal = ({ isOpen, onClose }) => {
             onClose={() => setCategoryModalOpen(false)}
           />
         )}
-        <button
-          onClick={handleSearch}
-          className="w-full mt-4 bg-brunswickgreen text-white py-2 rounded-lg border-2 border-brunswickgreen hover:bg-timberwolf hover:text-brunswickgreen hover:border-2 hover:border-brunswickgreen"
-        >
-          Search
-        </button>
+
+        <div className="flex justify-between mt-4">
+          <button
+            onClick={handleReset}
+            className="w-1/2 ml-2 bg-brunswickgreen font-livvic text-white py-2 rounded-lg border-2 border-brunswickgreen hover:bg-timberwolf hover:text-brunswickgreen hover:border-2 hover:border-brunswickgreen"
+          >
+            Reset Filter
+          </button>
+          <button
+            onClick={handleSearch}
+            className="w-1/2 ml-2 bg-brunswickgreen font-livvic text-white py-2 rounded-lg border-2 border-brunswickgreen hover:bg-timberwolf hover:text-brunswickgreen hover:border-2 hover:border-brunswickgreen"
+          >
+            Search
+          </button>
+        </div>
       </div>
     </div>
   );

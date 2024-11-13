@@ -11,7 +11,7 @@ const Searchbar = () => {
   const handleSearch = (event) => {
     const value = event.target.value;
     setLocalSearchTerm(value);
-    setSearchTerm(value); // Uppdatera global sökterm
+    setSearchTerm(value);
   };
 
   return (

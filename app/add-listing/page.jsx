@@ -220,7 +220,7 @@ const AddListingPage = () => {
             required
           />
           <div className="flex gap-2 ">
-            <label className="font-bold mt-2 mb-4">
+            <label className="font-bold mt-2 mb-4 font-livvic">
               Upload (multiple) Images:
             </label>
             <input
