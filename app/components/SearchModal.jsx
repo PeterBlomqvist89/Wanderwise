@@ -4,7 +4,6 @@ import { categories } from "../components/Categories";
 import CategoryModal from "./CategoryModal";
 import { DateRange } from "react-date-range";
 import { useSearch } from "../context/SearchContext";
-import { useRouter } from "next/navigation";
 import "react-date-range/dist/styles.css";
 import "react-date-range/dist/theme/default.css";
 
@@ -32,12 +31,14 @@ const SearchModal = ({ isOpen, onClose }) => {
   if (!isOpen) return null;
 
   return (
-    <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-40">
-      <div className="bg-timberwolf p-6 rounded-lg max-w-[730px] w-full">
-        <button onClick={onClose} className="relative left-[680px]">
-          <CircleX size={20} />
+    <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-40 overflow-y-auto">
+      <div className="bg-timberwolf p-6 rounded-lg max-w-[730px] w-full max-h-[90vh] overflow-y-auto">
+        <button onClick={onClose} className="relative left-[660px] mb-4">
+          <CircleX color="var(--brunswickgreen)" size={20} className="" />
         </button>
-        <h2 className="text-xl font-semibold mb-4">Where are we headed?</h2>
+        <h2 className="text-xl font-medium mb-4 font-livvic ">
+          Where are we headed?
+        </h2>
 
         <div className="flex flex-col gap-4">
           {/* Destination */}
@@ -90,14 +91,18 @@ const SearchModal = ({ isOpen, onClose }) => {
           {/* Kalender med start- och slutdatum */}
           <div>
             <label>Select Dates</label>
-            <DateRange
-              editableDateInputs={true}
-              onChange={(item) => setDateRange([item.selection])}
-              moveRangeOnFirstSelection={false}
-              ranges={dateRange}
-              minDate={new Date()}
-              rangeColors={["#344e41"]}
-            />
+            <div className="">
+              {" "}
+              {/* Begränsar bredden på kalendern */}
+              <DateRange
+                editableDateInputs={true}
+                onChange={(item) => setDateRange([item.selection])}
+                moveRangeOnFirstSelection={false}
+                ranges={dateRange}
+                minDate={new Date()}
+                rangeColors={["#344e41"]}
+              />
+            </div>
           </div>
         </div>
 

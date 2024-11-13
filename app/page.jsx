@@ -10,7 +10,7 @@ import { CircleX } from "lucide-react";
 export default function MainPage() {
   const {
     searchTerm,
-    setSearchTerm, // Lägg till setSearchTerm här
+    setSearchTerm,
     destination,
     category,
     guests,
