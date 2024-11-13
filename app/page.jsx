@@ -54,7 +54,7 @@ export default function MainPage() {
 
         if (category) {
           filtered = filtered.filter(
-            (listing) => listing.category === category.label
+            (listing) => listing.property_type?.label === category
           );
         }
 

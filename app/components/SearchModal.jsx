@@ -23,7 +23,13 @@ const SearchModal = ({ isOpen, onClose }) => {
   const [isCategoryModalOpen, setCategoryModalOpen] = useState(false);
 
   const handleSearch = () => {
-    setSearchParams({ destination, category, guests, maxPrice, dateRange });
+    setSearchParams({
+      destination,
+      category: category ? category.label : null, // Skicka endast label
+      guests,
+      maxPrice,
+      dateRange,
+    });
     setIsSearchActive(true);
     onClose();
   };
