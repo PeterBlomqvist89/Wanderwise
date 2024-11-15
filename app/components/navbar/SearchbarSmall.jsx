@@ -1,6 +1,7 @@
 import { useSearch } from "@/app/context/SearchContext";
 import { Search } from "lucide-react";
 import React, { useState } from "react";
+import Logo from "./Logo";
 
 const SearchbarSmall = () => {
   const { setSearchTerm } = useSearch();
@@ -13,8 +14,12 @@ const SearchbarSmall = () => {
   };
 
   return (
-    <div className="flex md:hidden top-0 left-0 right-0 h-[50px] px-28 py-12 items-center z-50">
-      <div className="relative flex-grow">
+    <div className="flex flex-col items-center justify-center md:hidden top-0 left-0 right-0 h-[100px] px-4 py-4 z-50 my-5">
+      <div className="my-5">
+        <Logo />
+      </div>
+
+      <div className="relative w-full max-w-xs">
         <input
           type="text"
           placeholder="Search..."

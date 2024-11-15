@@ -99,7 +99,7 @@ export default function MainPage() {
 
   const handleClearSearch = () => {
     setIsSearchActive(false);
-    setSearchTerm(""); // Återställ söktermen till en tom sträng
+    setSearchTerm("");
     setSearchParams({
       destination: "",
       category: null,
@@ -113,7 +113,7 @@ export default function MainPage() {
         },
       ],
     });
-    setFilteredListings(listings); // Återställ till alla listningar
+    setFilteredListings(listings);
   };
 
   const handleCardClick = (id) => {
@@ -128,7 +128,7 @@ export default function MainPage() {
         <link rel="icon" href="/favicon.ico" sizes="any" />
       </Head>
 
-      <div className="p-8 max-w-[1000px] mx-auto">
+      <div className="p-8 max-w-[1000px] mx-auto mb-20">
         {isSearchActive && (
           <div className="flex justify-center mb-4">
             <button

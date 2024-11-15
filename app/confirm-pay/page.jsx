@@ -33,11 +33,12 @@ const ConfirmPay = () => {
       if (user) {
         setCurrentUser(user.email);
       } else {
-        setCurrentUser(null);
+        // Redirect to sign-in page if the user is not logged in
+        router.push("/auth/sign-in");
       }
     });
     return () => unsubscribe();
-  }, []);
+  }, [router]);
 
   const numberOfNights =
     checkIn && checkOut
@@ -80,7 +81,7 @@ const ConfirmPay = () => {
         const updatedBookings = [
           ...(existingData.bookings || []),
           {
-            user: currentUser, // Lägg till användarens e-post här
+            user: currentUser,
             checkIn,
             checkOut,
             guests,

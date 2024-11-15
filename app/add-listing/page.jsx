@@ -263,7 +263,7 @@ const AddListingPage = () => {
             <button
               type="submit"
               disabled={isSubmitting}
-              className="text-xl text-brunswickgreen font-medium px-8 py-2 bg-timberwolf border-2 border-timberwolf rounded-full hover:bg-brunswickgreen hover:text-timberwolf hover:border-timberwolf"
+              className="text-xl font-livvic text-brunswickgreen font-medium px-8 py-2 bg-timberwolf border-2 border-timberwolf rounded-full hover:bg-brunswickgreen hover:text-timberwolf hover:border-timberwolf"
             >
               {isSubmitting ? "Submitting..." : "Add Listing"}
             </button>

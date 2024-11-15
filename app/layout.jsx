@@ -30,12 +30,9 @@ export default function RootLayout({ children }) {
         <AuthContextProvider>
           <SearchProvider>
             {" "}
-            {/* Wrap children with SearchProvider */}
             <BookingProvider>
               <Toaster />
-              <NavbarLarge />{" "}
-              {/* NavbarLarge will access setSearchTerm through context */}
-              <NavbarSmall />
+              <NavbarLarge /> <NavbarSmall />
               {pathname === "/" ? <SearchbarSmall /> : <LogoSmall />}
               <main className="flex-grow">{children}</main>
               <Footer />

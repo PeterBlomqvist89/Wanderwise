@@ -188,8 +188,10 @@ const Profile = () => {
         ) : (
           <>
             <div className="flex justify-between items-center border-b border-gray-300 py-2">
-              <p className="font-bold">Name:</p>
-              <p className="text-right">{userData.name || "Your Name"}</p>
+              <p className="font-bold font-livvic">Name:</p>
+              <p className="text-right font-livvic">
+                {userData.name || "Your Name"}
+              </p>
             </div>
 
             <div
@@ -199,29 +201,35 @@ const Profile = () => {
                   : "flex justify-between items-center"
               }`}
             >
-              <p className="font-bold">Bio:</p>
+              <p className="font-bold font-livvic">Bio:</p>
               {userData.bio ? (
-                <p className="w-full text-left mt-2">{userData.bio}</p>
+                <p className="w-full text-left mt-2 font-livvic">
+                  {userData.bio}
+                </p>
               ) : (
-                <p className="text-right">About you</p>
+                <p className="text-right font-livvic">About you</p>
               )}
             </div>
 
             <div className="flex justify-between items-center border-b border-gray-300 py-2">
-              <p className="font-bold">Location:</p>
-              <p className="text-right">
+              <p className="font-bold font-livvic">Location:</p>
+              <p className="text-right font-livvic">
                 {userData.location || "Where you from"}
               </p>
             </div>
 
             <div className="flex justify-between items-center border-b border-gray-300 py-2">
-              <p className="font-bold">Email:</p>
-              <p className="text-right">{userData.email || "your email"}</p>
+              <p className="font-bold font-livvic">Email:</p>
+              <p className="text-right font-livvic">
+                {userData.email || "your email"}
+              </p>
             </div>
 
             <div className="flex justify-between items-center border-b border-gray-300 py-2">
-              <p className="font-bold">Phone:</p>
-              <p className="text-right">{userData.phone || "number"}</p>
+              <p className="font-bold font-livvic">Phone:</p>
+              <p className="text-right font-livvic">
+                {userData.phone || "number"}
+              </p>
             </div>
           </>
         )}
@@ -230,7 +238,7 @@ const Profile = () => {
           {isEditing ? (
             <button
               onClick={handleSave}
-              className="text-xl text-brunswickgreen font-medium px-8 py-2 bg-timberwolf border-2 border-timberwolf rounded-full hover:bg-brunswickgreen hover:text-timberwolf hover:border-timberwolf mt-2"
+              className="text-xl font-livvic text-brunswickgreen font-medium px-8 py-2 bg-timberwolf border-2 border-timberwolf rounded-full hover:bg-brunswickgreen hover:text-timberwolf hover:border-timberwolf mt-2"
             >
               Save Changes
             </button>
@@ -238,14 +246,14 @@ const Profile = () => {
             <>
               <button
                 onClick={() => setIsEditing(true)}
-                className="text-xl text-brunswickgreen font-medium px-8 py-2 bg-timberwolf border-2 border-timberwolf rounded-full hover:bg-brunswickgreen hover:text-timberwolf hover:border-timberwolf mt-2"
+                className="text-xl font-livvic text-brunswickgreen font-medium px-8 py-2 bg-timberwolf border-2 border-timberwolf rounded-full hover:bg-brunswickgreen hover:text-timberwolf hover:border-timberwolf mt-2"
               >
                 Edit Profile
               </button>
               {/* Log Out button - only visible on mobile */}
               <button
                 onClick={handleLogout}
-                className="text-xl text-brunswickgreen font-medium px-8 py-2 bg-timberwolf border-2 border-timberwolf rounded-full hover:bg-brunswickgreen hover:text-timberwolf hover:border-timberwolf mt-2 block md:hidden"
+                className="text-xl font-livvic text-brunswickgreen font-medium px-8 py-2 bg-timberwolf border-2 border-timberwolf rounded-full hover:bg-brunswickgreen hover:text-timberwolf hover:border-timberwolf mt-2 block md:hidden"
               >
                 Log Out
               </button>
