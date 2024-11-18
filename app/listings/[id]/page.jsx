@@ -6,7 +6,13 @@ import { doc, getDoc, deleteDoc } from "firebase/firestore";
 import { db, auth } from "../../../firebaseConfig";
 import { onAuthStateChanged } from "firebase/auth";
 import Avatar from "@/app/components/Avatar";
-import { CircleArrowLeft, CircleArrowRight, CircleX, Star } from "lucide-react";
+import {
+  CircleArrowLeft,
+  CircleArrowRight,
+  CircleEllipsis,
+  CircleX,
+  Star,
+} from "lucide-react";
 import AmenityList from "@/app/components/AmenityList";
 import Image from "next/image";
 import { toast } from "react-hot-toast";
@@ -157,13 +163,22 @@ const Listings = () => {
           </div>
           <div className="grid grid-cols-2 gap-4">
             {listing.images.slice(1, 3).map((image, index) => (
-              <img
-                key={index + 1}
-                src={image.url || "/images/default-image.jpg"}
-                alt={`Listing Image ${index + 2}`}
-                className="w-full h-48 object-cover rounded-lg cursor-pointer"
-                onClick={() => openModal(index + 1)}
-              />
+              <div className="relative" key={index + 1}>
+                <img
+                  src={image.url || "/images/default-image.jpg"}
+                  alt={`Listing Image ${index + 2}`}
+                  className="w-full h-48 object-cover rounded-lg cursor-pointer"
+                  onClick={() => openModal(index + 1)}
+                />
+                {index === 1 && listing.images.length > 3 && (
+                  <div
+                    className="absolute inset-0 bg-black bg-opacity-50 rounded-lg flex items-center justify-center cursor-pointer"
+                    onClick={() => openModal(index + 1)}
+                  >
+                    <CircleEllipsis size={48} color="white" />
+                  </div>
+                )}
+              </div>
             ))}
           </div>
 
