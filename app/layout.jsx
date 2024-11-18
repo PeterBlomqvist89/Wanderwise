@@ -13,7 +13,7 @@ import { usePathname } from "next/navigation";
 import LogoSmall from "./components/navbar/LogoSmall";
 import { BookingProvider } from "./context/BookingContext";
 import { SearchProvider } from "./context/SearchContext";
-import SearchModal from "./components/SearchModal"; // Lägg till SearchModal här
+import SearchModal from "./components/SearchModal";
 
 const livvic = Livvic({
   subsets: ["latin"],

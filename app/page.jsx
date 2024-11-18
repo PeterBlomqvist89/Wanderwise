@@ -6,7 +6,7 @@ import ListingCard from "./components/ListingCard";
 import Head from "next/head";
 import { useSearch } from "./context/SearchContext";
 import { CircleX } from "lucide-react";
-import LoadingModal from "@/app/components/LoadingModal"; // Importera LoadingModal
+import LoadingModal from "@/app/components/LoadingModal";
 
 export default function MainPage() {
   const {
@@ -24,13 +24,13 @@ export default function MainPage() {
 
   const [listings, setListings] = useState([]);
   const [filteredListings, setFilteredListings] = useState([]);
-  const [isLoading, setIsLoading] = useState(true); // Laddningstillstånd
+  const [isLoading, setIsLoading] = useState(true);
   const router = useRouter();
 
   useEffect(() => {
     async function fetchListings() {
       try {
-        setIsLoading(true); // Starta laddning
+        setIsLoading(true);
         const response = await fetch("/api/listings");
         const data = await response.json();
         setListings(data);
@@ -38,7 +38,7 @@ export default function MainPage() {
       } catch (error) {
         console.error("Failed to fetch listings:", error);
       } finally {
-        setIsLoading(false); // Stoppa laddning
+        setIsLoading(false);
       }
     }
     fetchListings();
@@ -137,7 +137,6 @@ export default function MainPage() {
         <link rel="icon" href="/favicon.ico" sizes="any" />
       </Head>
 
-      {/* Loading Modal */}
       <LoadingModal isLoading={isLoading} />
 
       <div className="p-8 max-w-[1000px] mx-auto mb-20">

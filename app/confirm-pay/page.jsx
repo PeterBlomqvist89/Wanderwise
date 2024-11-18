@@ -9,6 +9,7 @@ import { useRouter } from "next/navigation";
 import { toast } from "react-hot-toast";
 import AmenityList from "@/app/components/AmenityList";
 import React, { useEffect, useState } from "react";
+import PayModal from "@/app/components/PayModal";
 
 const ConfirmPay = () => {
   const { bookingDetails } = useBooking();
@@ -25,15 +26,16 @@ const ConfirmPay = () => {
     amenities,
     images,
   } = bookingDetails;
+
   const router = useRouter();
   const [currentUser, setCurrentUser] = useState(null);
+  const [isModalOpen, setIsModalOpen] = useState(false);
 
   useEffect(() => {
     const unsubscribe = onAuthStateChanged(auth, (user) => {
       if (user) {
         setCurrentUser(user.email);
       } else {
-        // Redirect to sign-in page if the user is not logged in
         router.push("/auth/sign-in");
       }
     });
@@ -47,7 +49,6 @@ const ConfirmPay = () => {
   const totalPrice = price * numberOfNights;
   const grandTotal = totalPrice + cleaningFee + wanderwiseFee;
 
-  // Funktion för att hantera bokning
   const handlePay = async () => {
     if (!currentUser) {
       toast.error("Please log in to complete the booking.");
@@ -87,10 +88,13 @@ const ConfirmPay = () => {
             guests,
           },
         ];
-
         await updateDoc(docRef, { bookings: updatedBookings });
         toast.success("Booking confirmed!");
-        router.push("/my-reservations");
+        setIsModalOpen(true);
+        setTimeout(() => {
+          setIsModalOpen(false);
+          router.push("/my-reservations");
+        }, 8000);
       } else {
         toast.error("Listing not found.");
       }
@@ -119,7 +123,6 @@ const ConfirmPay = () => {
         </div>
       </div>
 
-      {/* Price Information */}
       <div className="space-y-4 border-t-2 pt-4">
         <h2 className="text-xl font-semibold font-livvic">Price Information</h2>
         <div className="flex justify-between">
@@ -142,7 +145,6 @@ const ConfirmPay = () => {
         </div>
       </div>
 
-      {/* Your Journey */}
       <div className="border-2 border-brunswickgreen p-4 rounded-lg space-y-4">
         <h3 className="text-xl font-semibold font-livvic">Your Journey</h3>
         <p className="font-livvic">
@@ -167,7 +169,6 @@ const ConfirmPay = () => {
         <AmenityList amenities={amenities} />
       </div>
 
-      {/* Payment Section */}
       <div className="space-y-4 border-t-2 pt-4">
         <h2 className="text-xl font-semibold font-livvic">
           Credit Card Details
@@ -202,6 +203,8 @@ const ConfirmPay = () => {
       >
         Pay Now
       </button>
+
+      <PayModal isOpen={isModalOpen} onClose={() => setIsModalOpen(false)} />
     </div>
   );
 };

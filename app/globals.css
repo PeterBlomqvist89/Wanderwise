@@ -16,6 +16,8 @@ body,
   --brunswickgreen: #344e41;
   --ferngreen: #588157;
   --grey: #3f3f3f;
+  margin: 0;
+  padding: 0;
 }
 
 .rdrMonth {
