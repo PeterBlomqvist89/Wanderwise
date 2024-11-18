@@ -20,6 +20,7 @@ import { useBooking } from "@/app/context/BookingContext";
 import { DateRange } from "react-date-range";
 import "react-date-range/dist/styles.css"; // Huvudstil
 import "react-date-range/dist/theme/default.css"; // Tema
+import LoadingModal from "@/app/components/LoadingModal";
 
 const Listings = () => {
   const { id } = useParams();
@@ -77,7 +78,7 @@ const Listings = () => {
   }, [id]);
 
   if (!listing) {
-    return <p>Loading...</p>;
+    return <LoadingModal isLoading={true} />;
   }
 
   // Kontrollera om den inloggade användaren är ägaren

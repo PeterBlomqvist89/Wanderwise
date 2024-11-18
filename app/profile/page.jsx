@@ -9,6 +9,7 @@ import toast from "react-hot-toast";
 import { useAuth } from "../components/AuthContextProvider";
 import { Settings } from "lucide-react";
 import { signOut } from "firebase/auth";
+import LoadingModal from "@/app/components/LoadingModal";
 
 const Profile = () => {
   const { user, authLoaded, updateUserProfile } = useAuth();
@@ -21,6 +22,7 @@ const Profile = () => {
     avatar: "",
   });
   const [isEditing, setIsEditing] = useState(false);
+  const [isLoading, setIsLoading] = useState(true);
   const router = useRouter();
 
   const capitalizeFirstLetter = (str) => {
@@ -60,7 +62,7 @@ const Profile = () => {
   };
 
   if (!authLoaded) {
-    return <div>Loading...</div>; // Visa en laddningsindikator tills authLoaded är true
+    return <LoadingModal isLoading={true} />; // Visa en laddningsindikator tills authLoaded är true
   }
 
   const handleAvatarChange = async (e) => {

@@ -6,6 +6,7 @@ import ListingCard from "./components/ListingCard";
 import Head from "next/head";
 import { useSearch } from "./context/SearchContext";
 import { CircleX } from "lucide-react";
+import LoadingModal from "@/app/components/LoadingModal"; // Importera LoadingModal
 
 export default function MainPage() {
   const {
@@ -23,14 +24,22 @@ export default function MainPage() {
 
   const [listings, setListings] = useState([]);
   const [filteredListings, setFilteredListings] = useState([]);
+  const [isLoading, setIsLoading] = useState(true); // Laddningstillstånd
   const router = useRouter();
 
   useEffect(() => {
     async function fetchListings() {
-      const response = await fetch("/api/listings");
-      const data = await response.json();
-      setListings(data);
-      setFilteredListings(data);
+      try {
+        setIsLoading(true); // Starta laddning
+        const response = await fetch("/api/listings");
+        const data = await response.json();
+        setListings(data);
+        setFilteredListings(data);
+      } catch (error) {
+        console.error("Failed to fetch listings:", error);
+      } finally {
+        setIsLoading(false); // Stoppa laddning
+      }
     }
     fetchListings();
   }, []);
@@ -127,6 +136,9 @@ export default function MainPage() {
         <meta name="description" content="Find your home away from home" />
         <link rel="icon" href="/favicon.ico" sizes="any" />
       </Head>
+
+      {/* Loading Modal */}
+      <LoadingModal isLoading={isLoading} />
 
       <div className="p-8 max-w-[1000px] mx-auto mb-20">
         {isSearchActive && (
