@@ -11,10 +11,23 @@ import { db, auth } from "../../firebaseConfig";
 import { onAuthStateChanged } from "firebase/auth";
 import { toast } from "react-hot-toast";
 import { useEffect, useState } from "react";
+import { useRouter } from "next/navigation";
 
 const MyReservations = () => {
   const [reservations, setReservations] = useState([]);
   const [currentUser, setCurrentUser] = useState(null);
+  const router = useRouter();
+
+  useEffect(() => {
+    const unsubscribe = onAuthStateChanged(auth, (user) => {
+      if (user) {
+        setCurrentUser(user.email);
+      } else {
+        router.push("/auth/sign-in");
+      }
+    });
+    return () => unsubscribe();
+  }, [router]);
 
   useEffect(() => {
     const unsubscribe = onAuthStateChanged(auth, (user) => {
@@ -41,14 +54,16 @@ const MyReservations = () => {
 
           if (userBookings && userBookings.length > 0) {
             userBookings.forEach((booking) => {
-              userReservations.push({
+              const reservation = {
                 id: doc.id,
                 address: data.address,
                 checkIn: booking.checkIn,
                 checkOut: booking.checkOut,
                 guests: booking.guests,
-                image: data.images?.[0]?.url || "/images/default-image.jpg", // Använd den första bilden eller standardbild
-              });
+                user: booking.user,
+                image: data.images?.[0]?.url || "/images/default-image.jpg",
+              };
+              userReservations.push(reservation);
             });
           }
         });
@@ -59,23 +74,37 @@ const MyReservations = () => {
 
     fetchReservations();
   }, [currentUser]);
-
-  const handleDeleteReservation = async (listingId, bookingIndex) => {
+  const handleDeleteReservation = async (listingId, reservation) => {
     try {
       const docRef = doc(db, "listings", listingId);
       const docSnap = await getDoc(docRef);
-      const data = docSnap.data();
 
-      const updatedBookings = data.bookings.filter(
-        (_, index) => index !== bookingIndex
-      );
+      if (docSnap.exists()) {
+        const data = docSnap.data();
 
-      await updateDoc(docRef, { bookings: updatedBookings });
-      toast.success("Reservation deleted.");
+        const updatedBookings = data.bookings.filter((booking) => {
+          return !(
+            booking.checkIn === reservation.checkIn &&
+            booking.checkOut === reservation.checkOut &&
+            booking.user.trim().toLowerCase() ===
+              reservation.user.trim().toLowerCase()
+          );
+        });
 
-      setReservations((prev) =>
-        prev.filter((res, idx) => res.id !== listingId || idx !== bookingIndex)
-      );
+        await updateDoc(docRef, { bookings: updatedBookings });
+        toast.success("Reservation deleted.");
+
+        setReservations((prev) =>
+          prev.filter(
+            (res) =>
+              res.checkIn !== reservation.checkIn ||
+              res.checkOut !== reservation.checkOut ||
+              res.user !== reservation.user
+          )
+        );
+      } else {
+        toast.error("Listing not found.");
+      }
     } catch (error) {
       toast.error("Failed to delete reservation. Please try again.");
       console.error("Delete reservation error:", error);
@@ -117,7 +146,10 @@ const MyReservations = () => {
               </p>
               <p className="font-livvic">Guests: {reservation.guests}</p>
               <button
-                onClick={() => handleDeleteReservation(reservation.id, idx)}
+                onClick={() => {
+                  console.log("Reservation object:", reservation);
+                  handleDeleteReservation(reservation.id, reservation);
+                }}
                 className="mt-2 bg-red-500 text-white p-2 rounded font-livvic hover:bg-red-600"
               >
                 Cancel Reservation
@@ -130,7 +162,7 @@ const MyReservations = () => {
                 className="w-32 h-32 object-cover rounded"
                 onError={(e) => {
                   e.target.src = "/images/default-image.jpg";
-                }} // Reservbild om laddning misslyckas
+                }}
               />
             </div>
           </div>
