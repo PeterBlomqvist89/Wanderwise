@@ -1,4 +1,4 @@
-import { useAuth } from "../components/AuthContextProvider";
+import { useAuth } from "../context/AuthContextProvider";
 import { CircleUserRound } from "lucide-react";
 
 const Avatar = ({ avatarUrl, className = "h-[63px] w-[63px]" }) => {

@@ -20,7 +20,7 @@ import { useBooking } from "@/app/context/BookingContext";
 import { DateRange } from "react-date-range";
 import "react-date-range/dist/styles.css"; // Huvudstil
 import "react-date-range/dist/theme/default.css"; // Tema
-import LoadingModal from "@/app/components/LoadingModal";
+import LoadingModal from "@/app/components/modal/LoadingModal";
 
 const Listings = () => {
   const { id } = useParams();

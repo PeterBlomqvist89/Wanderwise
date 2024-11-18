@@ -8,7 +8,7 @@ import NavbarSmall from "./components/navbar/NavbarSmall";
 import NavbarLarge from "./components/navbar/NavbarLarge";
 import SearchbarSmall from "./components/navbar/SearchbarSmall";
 import { Toaster } from "react-hot-toast";
-import AuthContextProvider from "./components/AuthContextProvider";
+import AuthContextProvider from "./context/AuthContextProvider";
 import { usePathname } from "next/navigation";
 import LogoSmall from "./components/navbar/LogoSmall";
 import { BookingProvider } from "./context/BookingContext";

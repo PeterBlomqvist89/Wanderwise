@@ -6,7 +6,7 @@ import { doc, getDoc, addDoc, collection } from "firebase/firestore";
 import { ref, uploadBytes, getDownloadURL } from "firebase/storage";
 import { toast } from "react-hot-toast";
 import CategoryModal from "../components/CategoryModal";
-import { useAuth } from "../components/AuthContextProvider";
+import { useAuth } from "../context/AuthContextProvider";
 
 import { CircleX, ImageUp } from "lucide-react";
 import { useRouter } from "next/navigation";

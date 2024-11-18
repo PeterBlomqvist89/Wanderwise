@@ -6,7 +6,7 @@ import ListingCard from "./components/ListingCard";
 import Head from "next/head";
 import { useSearch } from "./context/SearchContext";
 import { CircleX } from "lucide-react";
-import LoadingModal from "@/app/components/LoadingModal";
+import LoadingModal from "@/app/components/modal/LoadingModal";
 
 export default function MainPage() {
   const {

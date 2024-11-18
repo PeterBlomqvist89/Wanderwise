@@ -9,7 +9,7 @@ import { useRouter } from "next/navigation";
 import { toast } from "react-hot-toast";
 import AmenityList from "@/app/components/AmenityList";
 import React, { useEffect, useState } from "react";
-import PayModal from "@/app/components/PayModal";
+import PayModal from "../components/modal/PayModal";
 
 const ConfirmPay = () => {
   const { bookingDetails } = useBooking();

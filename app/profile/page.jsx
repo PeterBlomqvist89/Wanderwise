@@ -6,10 +6,10 @@ import { db, storage, auth } from "../../firebaseConfig";
 import { doc, getDoc, setDoc } from "firebase/firestore";
 import { ref, uploadBytes, getDownloadURL } from "firebase/storage";
 import toast from "react-hot-toast";
-import { useAuth } from "../components/AuthContextProvider";
+import { useAuth } from "../context/AuthContextProvider";
 import { Settings } from "lucide-react";
 import { signOut } from "firebase/auth";
-import LoadingModal from "@/app/components/LoadingModal";
+import LoadingModal from "@/app/components/modal/LoadingModal";
 
 const Profile = () => {
   const { user, authLoaded, updateUserProfile } = useAuth();

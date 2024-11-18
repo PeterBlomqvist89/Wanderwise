@@ -13,6 +13,17 @@ const FormInput = () => {
 
   const handleRegister = async (e) => {
     e.preventDefault();
+
+    if (!name || !email || !password) {
+      toast.error("All fields are required.");
+      return;
+    }
+
+    if (password.length < 6) {
+      toast.error("Password must be at least 6 characters long.");
+      return;
+    }
+
     try {
       const userCredential = await createUserWithEmailAndPassword(
         auth,
