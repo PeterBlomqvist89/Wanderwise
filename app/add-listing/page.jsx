@@ -78,7 +78,6 @@ const AddListingPage = () => {
         })
       );
 
-      // Hämta användarens fullständiga profil från Firestore
       const userRef = doc(db, "users", user.uid);
       const userDoc = await getDoc(userRef);
       const userData = userDoc.exists() ? userDoc.data() : {};
@@ -97,7 +96,7 @@ const AddListingPage = () => {
             name: userData.name || "N/A",
             contact: user?.email || "N/A",
             avatar: userData.avatar || "/images/default-avatar.jpg",
-            phone: userData.phone || "N/A", // Säkerställ att telefonnumret kommer från användarens profil
+            phone: userData.phone || "N/A",
           },
         ],
         property_type: selectedCategory
@@ -167,6 +166,7 @@ const AddListingPage = () => {
             type="number"
             name="max_guests"
             placeholder="Enter max number of guests"
+            min={1}
             value={listingData.max_guests}
             onChange={handleInputChange}
             className="w-full p-2 border rounded text-black font-livvic"

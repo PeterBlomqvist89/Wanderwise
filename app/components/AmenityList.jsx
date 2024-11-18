@@ -78,14 +78,13 @@ const AmenityList = ({ amenities }) => {
   return (
     <ul className="flex flex-wrap gap-4 list-none justify-center mx-auto">
       {amenities.map((amenity, index) => {
-        const amenityKey = amenity.trim().toLowerCase(); // Standardize the amenity key
+        const amenityKey = amenity.trim().toLowerCase();
         return (
           <li
             key={index}
-            className="flex items-center justify-center flex-col  h-24 space-y-1" // Fixed size for consistent layout
+            className="flex items-center justify-center flex-col  h-24 space-y-1 group"
           >
-            {/* Display the icon if it exists in the icons object */}
-            <div className="flex items-center justify-center h-8">
+            <div className="flex items-center justify-center h-8 transform transition-transform duration-300 group-hover:scale-150">
               {icons[amenityKey] ? (
                 <span className="text-brunswickgreen">{icons[amenityKey]}</span>
               ) : null}

@@ -153,7 +153,7 @@ export default function MainPage() {
           </div>
         )}
 
-        <div className="flex flex-col grid-cols-1 md:grid-cols-3 gap-4 md:grid">
+        <div className="flex flex-col grid-cols-1 md:grid-cols-3 gap-4 md:grid hover:cursor-pointer">
           {filteredListings.map((listing, index) => (
             <ListingCard
               key={listing.id}

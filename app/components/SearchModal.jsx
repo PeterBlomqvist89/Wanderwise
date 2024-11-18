@@ -52,11 +52,11 @@ const SearchModal = () => {
   };
 
   return (
-    <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-40 overflow-y-auto z-50">
+    <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center overflow-y-auto z-50">
       <div className="bg-timberwolf mx-6 my-32 p-6 rounded-lg max-w-[730px] w-full max-h-[90vh] overflow-y-auto relative ">
         {/* Close Button */}
         <button
-          onClick={closeModal} // Använd global stängningsfunktion
+          onClick={closeModal}
           aria-label="Close search modal"
           className="absolute top-4 right-4 p-2 text-brunswickgreen hover:bg-gray-200 rounded-full"
         >

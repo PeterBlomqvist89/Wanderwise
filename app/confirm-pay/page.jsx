@@ -104,14 +104,14 @@ const ConfirmPay = () => {
     <div className="container mx-auto p-8 space-y-8 max-w-[1000px] mb-16">
       <h1 className="text-xl font-livvic">{address}</h1>
 
-      <div className="flex flex-col lg:flex-row gap-8">
-        <div className="lg:w-1/2 w-full">
+      <div className="flex flex-col lg:flex-row gap-8 ">
+        <div className="lg:w-1/2 w-full relative overflow-hidden">
           <Image
             src={images[0]?.url || "/images/default-image.jpg"}
             alt="Selected Listing Image"
             width={800}
             height={500}
-            className="w-full h-64 object-cover rounded-lg"
+            className="w-full h-64 object-cover rounded-lg transform transition-transform duration-700 hover:scale-110"
           />
         </div>
         <div className="lg:w-1/2 w-full">

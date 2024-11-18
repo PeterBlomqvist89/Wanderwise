@@ -90,7 +90,7 @@ const Listings = () => {
     try {
       await deleteDoc(docRef);
       toast.success("Listing deleted successfully!");
-      router.push("/"); // Omdirigera till startsidan efter borttagning
+      router.push("/");
     } catch (error) {
       toast.error("Failed to complete booking. Please try again.");
       console.error("Booking error:", error);
@@ -154,26 +154,28 @@ const Listings = () => {
       <div className="flex flex-col   lg:flex-row gap-8">
         {/* Images Section */}
         <div className="lg:w-1/2 w-full space-y-3">
-          <div className="w-full">
+          <div className="w-full relative overflow-hidden">
             <img
               src={listing.images[0]?.url}
               alt="Main Listing Image"
-              className="w-full h-64 object-cover rounded-lg cursor-pointer"
+              className="w-full h-64 object-cover rounded-lg cursor-pointer transform transition-transform duration-700 hover:scale-110"
               onClick={() => openModal(0)}
             />
           </div>
           <div className="grid grid-cols-2 gap-4">
             {listing.images.slice(1, 3).map((image, index) => (
-              <div className="relative" key={index + 1}>
+              <div className="relative overflow-hidden group" key={index + 1}>
+                {/* Bilden */}
                 <img
                   src={image.url || "/images/default-image.jpg"}
                   alt={`Listing Image ${index + 2}`}
-                  className="w-full h-48 object-cover rounded-lg cursor-pointer"
+                  className="w-full h-48 object-cover rounded-lg cursor-pointer transform transition-transform duration-700 group-hover:scale-110"
                   onClick={() => openModal(index + 1)}
                 />
+                {/* Overlay med CircleEllipsis */}
                 {index === 1 && listing.images.length > 3 && (
                   <div
-                    className="absolute inset-0 bg-black bg-opacity-50 rounded-lg flex items-center justify-center cursor-pointer"
+                    className="absolute inset-0 bg-black bg-opacity-50 rounded-lg flex items-center justify-center cursor-pointer transition-opacity duration-700 group-hover:opacity-100"
                     onClick={() => openModal(index + 1)}
                   >
                     <CircleEllipsis size={48} color="white" />
