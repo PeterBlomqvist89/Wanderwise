@@ -17,6 +17,9 @@ export const SearchProvider = ({ children }) => {
   ]);
   const [isSearchActive, setIsSearchActive] = useState(false);
 
+  // Modal state
+  const [isModalOpen, setModalOpen] = useState(false);
+
   const setSearchParams = ({
     destination,
     category,
@@ -31,6 +34,10 @@ export const SearchProvider = ({ children }) => {
     setDateRange(dateRange);
   };
 
+  // Modal handlers
+  const openModal = () => setModalOpen(true);
+  const closeModal = () => setModalOpen(false);
+
   return (
     <SearchContext.Provider
       value={{
@@ -44,6 +51,9 @@ export const SearchProvider = ({ children }) => {
         isSearchActive,
         setIsSearchActive,
         setSearchParams,
+        isModalOpen, // Exportera modalens state
+        openModal, // Exportera öppningsfunktion
+        closeModal, // Exportera stängningsfunktion
       }}
     >
       {children}

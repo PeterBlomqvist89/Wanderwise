@@ -1,14 +1,15 @@
 import React, { useState } from "react";
 import { CircleX } from "lucide-react";
-import { categories } from "../components/Categories";
+import { categories } from "../components/Categories"; // Antag att detta är korrekt
 import CategoryModal from "./CategoryModal";
 import { DateRange } from "react-date-range";
-import { useSearch } from "../context/SearchContext";
+import { useSearch } from "@/app/context/SearchContext";
 import "react-date-range/dist/styles.css";
 import "react-date-range/dist/theme/default.css";
 
-const SearchModal = ({ isOpen, onClose }) => {
-  const { setSearchParams, setIsSearchActive } = useSearch();
+const SearchModal = () => {
+  const { setSearchParams, setIsSearchActive, isModalOpen, closeModal } =
+    useSearch();
   const [destination, setDestination] = useState("");
   const [category, setCategory] = useState(null);
   const [guests, setGuests] = useState(1);
@@ -22,6 +23,8 @@ const SearchModal = ({ isOpen, onClose }) => {
   ]);
   const [isCategoryModalOpen, setCategoryModalOpen] = useState(false);
 
+  if (!isModalOpen) return null; // Kontrollera om modalen ska visas
+
   const handleSearch = () => {
     setSearchParams({
       destination,
@@ -31,7 +34,7 @@ const SearchModal = ({ isOpen, onClose }) => {
       dateRange,
     });
     setIsSearchActive(true);
-    onClose();
+    closeModal(); // Stäng modalen
   };
 
   const handleReset = () => {
@@ -48,19 +51,12 @@ const SearchModal = ({ isOpen, onClose }) => {
     ]);
   };
 
-  const handleClose = () => {
-    handleReset();
-    onClose();
-  };
-
-  if (!isOpen) return null;
-
   return (
-    <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-40 overflow-y-auto">
-      <div className="bg-timberwolf p-6 rounded-lg max-w-[730px] w-full max-h-[90vh] overflow-y-auto relative">
+    <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-40 overflow-y-auto z-50">
+      <div className="bg-timberwolf mx-6 my-32 p-6 rounded-lg max-w-[730px] w-full max-h-[90vh] overflow-y-auto relative ">
         {/* Close Button */}
         <button
-          onClick={handleClose}
+          onClick={closeModal} // Använd global stängningsfunktion
           aria-label="Close search modal"
           className="absolute top-4 right-4 p-2 text-brunswickgreen hover:bg-gray-200 rounded-full"
         >

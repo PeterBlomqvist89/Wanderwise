@@ -1,17 +1,13 @@
 "use client";
 
-import React, { useState } from "react";
+import React from "react";
 import { House, HousePlus, Search, UserRoundPen } from "lucide-react";
 import { useRouter } from "next/navigation";
-import SearchModal from "../SearchModal";
+import { useSearch } from "@/app/context/SearchContext";
 
 const NavbarSmall = () => {
   const router = useRouter();
-  const [isSearchModalOpen, setIsSearchModalOpen] = useState(false);
-
-  const toggleSearchModal = () => {
-    setIsSearchModalOpen((prev) => !prev);
-  };
+  const { openModal } = useSearch(); // Använd global modalöppning från SearchContext
 
   return (
     <>
@@ -26,7 +22,7 @@ const NavbarSmall = () => {
           color="var(--timberwolf)"
           size={45}
           className="cursor-pointer"
-          onClick={toggleSearchModal}
+          onClick={openModal} // Öppna modalen
         />
         <UserRoundPen
           color="var(--timberwolf)"
@@ -41,8 +37,6 @@ const NavbarSmall = () => {
           onClick={() => router.push("/add-listing")}
         />
       </nav>
-
-      {isSearchModalOpen && <SearchModal onClose={toggleSearchModal} />}
     </>
   );
 };

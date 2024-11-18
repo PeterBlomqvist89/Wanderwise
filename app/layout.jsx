@@ -1,5 +1,6 @@
 "use client";
 
+import React from "react";
 import { Livvic } from "next/font/google";
 import "./globals.css";
 import Footer from "./components/Footer";
@@ -12,6 +13,7 @@ import { usePathname } from "next/navigation";
 import LogoSmall from "./components/navbar/LogoSmall";
 import { BookingProvider } from "./context/BookingContext";
 import { SearchProvider } from "./context/SearchContext";
+import SearchModal from "./components/SearchModal"; // Lägg till SearchModal här
 
 const livvic = Livvic({
   subsets: ["latin"],
@@ -29,10 +31,11 @@ export default function RootLayout({ children }) {
       >
         <AuthContextProvider>
           <SearchProvider>
-            {" "}
             <BookingProvider>
               <Toaster />
-              <NavbarLarge /> <NavbarSmall />
+              <SearchModal />
+              <NavbarLarge />
+              <NavbarSmall />
               {pathname === "/" ? <SearchbarSmall /> : <LogoSmall />}
               <main className="flex-grow">{children}</main>
               <Footer />
