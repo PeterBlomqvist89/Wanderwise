@@ -85,8 +85,14 @@ const AuthContextProvider = ({ children }) => {
         throw new Error("Something went wrong, please try again later.");
       }
 
-      // Hämta användardata om det finns
+      // Hämta användardata
       const userData = await fetchUserData(userCredential.user.uid);
+
+      // Uppdatera användarens tillstånd med ytterligare data
+      setUser({
+        ...userCredential.user,
+        ...userData,
+      });
 
       toast.success("Signed in!", { id: toastId });
     } catch (err) {
